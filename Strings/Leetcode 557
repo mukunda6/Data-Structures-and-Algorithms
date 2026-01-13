@@ -1,0 +1,30 @@
+// Problem: Reverse Words in a String
+// Platform: LeetCode / CodeChef
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Reverse each word in the string
+string reverseWords(string s) {
+    int i = 0, n = s.size();
+
+    while (i < n) {
+        int j = i;
+        while (j < n && s[j] != ' ') {
+            j++;
+        }
+        reverse(s.begin() + i, s.begin() + j);
+        i = j + 1;
+    }
+    return s;
+}
+
+int main() {
+    string s;
+    getline(cin, s);   // Important: reads full line
+
+    cout << reverseWords(s) << endl;
+    return 0;
+}
