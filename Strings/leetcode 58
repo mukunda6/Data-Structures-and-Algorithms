@@ -1,0 +1,36 @@
+// Problem: Length of Last Word
+// Platform: LeetCode / CodeChef
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find length of last word
+int lengthOfLastWord(string s) {
+    int i = s.size() - 1;
+    int cnt = 0;
+
+    // Skip trailing spaces
+    while (i >= 0 && s[i] == ' ') {
+        i--;
+    }
+
+    // Count characters of last word
+    while (i >= 0 && s[i] != ' ') {
+        cnt++;
+        i--;
+    }
+
+    return cnt;
+}
+
+int main() {
+    string s;
+
+    // Read full sentence
+    getline(cin, s);
+
+    cout << lengthOfLastWord(s) << endl;
+    return 0;
+}
