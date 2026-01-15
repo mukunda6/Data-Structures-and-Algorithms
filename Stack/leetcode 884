@@ -1,37 +1,43 @@
 // Problem: Uncommon Words from Two Sentences
 // Platform: LeetCode / CodeChef
-// Time Complexity: O(n + m)
-// Space Complexity: O(n + m)
+//
+// ------------------------------------------------------------
+// Method 1: Two Hash Maps
+// Method 2: Single Hash Map (Optimized)
+// ------------------------------------------------------------
+//
+// Time Complexity:
+// Method 1: O(n + m)
+// Method 2: O(n + m)
+//
+// Space Complexity:
+// Method 1: O(n + m)
+// Method 2: O(n + m)
+// ------------------------------------------------------------
 
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to find uncommon words
-vector<string> uncommonFromSentences(string s1, string s2) {
+/* ================= METHOD 1: TWO HASH MAPS ================= */
+vector<string> uncommonFromSentences_Method1(string s1, string s2) {
     unordered_map<string, int> m1, m2;
     vector<string> ans;
     string word;
 
-    // Split first sentence
-    stringstream ss1(s1);
+    stringstream ss1(s1), ss2(s2);
+
     while (ss1 >> word) {
         m1[word]++;
     }
-
-    // Split second sentence
-    stringstream ss2(s2);
     while (ss2 >> word) {
         m2[word]++;
     }
 
-    // Words unique to s1
     for (auto &p : m1) {
         if (p.second == 1 && m2[p.first] == 0) {
             ans.push_back(p.first);
         }
     }
-
-    // Words unique to s2
     for (auto &p : m2) {
         if (p.second == 1 && m1[p.first] == 0) {
             ans.push_back(p.first);
@@ -41,17 +47,42 @@ vector<string> uncommonFromSentences(string s1, string s2) {
     return ans;
 }
 
+/* =============== METHOD 2: SINGLE HASH MAP (OPTIMAL) =============== */
+vector<string> uncommonFromSentences_Method2(string s1, string s2) {
+    unordered_map<string, int> m;
+    vector<string> ans;
+    string word;
+
+    stringstream ss1(s1), ss2(s2);
+
+    while (ss1 >> word) {
+        m[word]++;
+    }
+    while (ss2 >> word) {
+        m[word]++;
+    }
+
+    for (auto &p : m) {
+        if (p.second == 1) {
+            ans.push_back(p.first);
+        }
+    }
+
+    return ans;
+}
+
 int main() {
-    // Example test cases
     string s1 = "this apple is sweet";
     string s2 = "this apple is sour";
 
-    vector<string> result = uncommonFromSentences(s1, s2);
+    cout << "Method 1 Output: ";
+    vector<string> res1 = uncommonFromSentences_Method1(s1, s2);
+    for (string &w : res1) cout << w << " ";
+    cout << endl;
 
-    cout << "Uncommon words: ";
-    for (string &w : result) {
-        cout << w << " ";
-    }
+    cout << "Method 2 Output: ";
+    vector<string> res2 = uncommonFromSentences_Method2(s1, s2);
+    for (string &w : res2) cout << w << " ";
     cout << endl;
 
     return 0;
