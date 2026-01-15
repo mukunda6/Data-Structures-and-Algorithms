@@ -1,0 +1,41 @@
+// Problem: Happy Number
+// Platform: LeetCode / CodeChef
+// Approach: Set (Cycle Detection)
+// Time Complexity: O(log n) per iteration
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if a number is happy
+bool isHappy(int n) {
+    unordered_set<int> s;
+
+    while (n != 1) {
+        // Cycle detected
+        if (s.count(n)) {
+            return false;
+        }
+        s.insert(n);
+
+        int sum = 0;
+        while (n > 0) {
+            int dig = n % 10;
+            sum += dig * dig;
+            n /= 10;
+        }
+        n = sum;
+    }
+    return true;
+}
+
+int main() {
+    // Example test cases
+    int n1 = 19;
+    int n2 = 2;
+
+    cout << "Is 19 a happy number? " << isHappy(n1) << endl; // 1
+    cout << "Is 2 a happy number? " << isHappy(n2) << endl;  // 0
+
+    return 0;
+}
