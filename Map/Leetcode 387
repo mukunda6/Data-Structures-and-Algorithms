@@ -1,0 +1,37 @@
+// Problem: First Unique Character in a String
+// Platform: LeetCode / CodeChef
+// Approach: Hash Map (Frequency Count)
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find index of first non-repeating character
+int firstUniqChar(string s) {
+    unordered_map<char, int> freq;
+
+    // Count frequency of each character
+    for (char c : s) {
+        freq[c]++;
+    }
+
+    // Find first character with frequency 1
+    for (int i = 0; i < s.size(); i++) {
+        if (freq[s[i]] == 1) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    // Example test cases
+    string s1 = "leetcode";
+    string s2 = "loveleetcode";
+
+    cout << "Input: " << s1 << " -> Output: " << firstUniqChar(s1) << endl; // 0
+    cout << "Input: " << s2 << " -> Output: " << firstUniqChar(s2) << endl; // 2
+
+    return 0;
+}
