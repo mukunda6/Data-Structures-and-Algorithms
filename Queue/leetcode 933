@@ -1,0 +1,38 @@
+// Problem: Number of Recent Calls (Recent Counter)
+// Platform: LeetCode / CodeChef
+// Time Complexity: O(1) amortized per ping
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class RecentCounter {
+public:
+    queue<int> q;
+
+    RecentCounter() {}
+
+    // Record a ping at time t
+    int ping(int t) {
+        q.push(t);
+
+        // Remove outdated pings
+        while (!q.empty() && q.front() < t - 3000) {
+            q.pop();
+        }
+
+        return q.size();
+    }
+};
+
+int main() {
+    RecentCounter rc;
+
+    // Example test cases
+    cout << rc.ping(1) << endl;     // 1
+    cout << rc.ping(100) << endl;   // 2
+    cout << rc.ping(3001) << endl;  // 3
+    cout << rc.ping(3002) << endl;  // 3
+
+    return 0;
+}
