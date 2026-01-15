@@ -1,0 +1,89 @@
+// Problem: Design Circular Queue (Ring Buffer)
+// Platform: LeetCode / CodeChef
+//
+// Time Complexity:
+//   enQueue  -> O(1)
+//   deQueue  -> O(1)
+//   Front    -> O(1)
+//   Rear     -> O(1)
+//
+// Space Complexity: O(k)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class MyCircularQueue {
+private:
+    vector<int> q;
+    int front, rear, size, capacity;
+
+public:
+    // Initialize the circular queue
+    MyCircularQueue(int k) {
+        capacity = k;
+        q.resize(k);
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    // Insert element into the circular queue
+    bool enQueue(int value) {
+        if (isFull()) return false;
+
+        rear = (rear + 1) % capacity;
+        q[rear] = value;
+        size++;
+        return true;
+    }
+
+    // Delete element from the circular queue
+    bool deQueue() {
+        if (isEmpty()) return false;
+
+        front = (front + 1) % capacity;
+        size--;
+        return true;
+    }
+
+    // Get front element
+    int Front() {
+        if (isEmpty()) return -1;
+        return q[front];
+    }
+
+    // Get last element
+    int Rear() {
+        if (isEmpty()) return -1;
+        return q[rear];
+    }
+
+    // Check if queue is empty
+    bool isEmpty() {
+        return size == 0;
+    }
+
+    // Check if queue is full
+    bool isFull() {
+        return size == capacity;
+    }
+};
+
+int main() {
+    // Example test case (same as problem statement)
+    MyCircularQueue cq(3);
+
+    cout << "enQueue(1): " << cq.enQueue(1) << endl; // true
+    cout << "enQueue(2): " << cq.enQueue(2) << endl; // true
+    cout << "enQueue(3): " << cq.enQueue(3) << endl; // true
+    cout << "enQueue(4): " << cq.enQueue(4) << endl; // false
+
+    cout << "Rear(): " << cq.Rear() << endl;         // 3
+    cout << "isFull(): " << cq.isFull() << endl;     // true
+
+    cout << "deQueue(): " << cq.deQueue() << endl;   // true
+    cout << "enQueue(4): " << cq.enQueue(4) << endl; // true
+    cout << "Rear(): " << cq.Rear() << endl;         // 4
+
+    return 0;
+}
