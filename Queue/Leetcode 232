@@ -1,92 +1,120 @@
 // Problem: Implement Queue using Stack
 // Platform: LeetCode / CodeChef
-// Approach: Two Stacks
+//
+// ------------------------------------------------------------
+// Method 1: Costly Push (Two Stacks)
+// Method 2: Costly Pop / Lazy Transfer (Optimized)
+// ------------------------------------------------------------
 //
 // Time Complexity:
-//   push  -> O(n)
-//   pop   -> O(1)
-//   peek  -> O(1)
+// Method 1:
+//   push -> O(n), pop -> O(1), peek -> O(1)
+//
+// Method 2:
+//   push -> O(1), pop -> Amortized O(1), peek -> Amortized O(1)
 //
 // Space Complexity: O(n)
+// ------------------------------------------------------------
 
 #include <bits/stdc++.h>
 using namespace std;
 
-// Queue implementation using two stacks
-class StackQueue {
+/* ================= METHOD 1: COSTLY PUSH ================= */
+class StackQueue_Method1 {
 private:
     stack<int> st1, st2;
 
 public:
-    StackQueue() {}
-
-    // Push element to the back of queue
     void push(int x) {
-        // Move all elements to st2
         while (!st1.empty()) {
             st2.push(st1.top());
             st1.pop();
         }
 
-        // Push new element
         st1.push(x);
 
-        // Move everything back to st1
         while (!st2.empty()) {
             st1.push(st2.top());
             st2.pop();
         }
     }
 
-    // Remove the front element
     int pop() {
-        if (st1.empty()) {
-            return -1;
-        }
+        if (st1.empty()) return -1;
         int val = st1.top();
         st1.pop();
         return val;
     }
 
-    // Get the front element
     int peek() {
-        if (st1.empty()) {
-            return -1;
-        }
+        if (st1.empty()) return -1;
         return st1.top();
     }
 
-    // Check if queue is empty
     bool isEmpty() {
         return st1.empty();
     }
 };
 
-int main() {
-    StackQueue q;
+/* ============ METHOD 2: COSTLY POP (OPTIMIZED) ============ */
+class StackQueue_Method2 {
+private:
+    stack<int> input, output;
 
-    // Simulating operations
-    vector<string> commands = {
-        "StackQueue", "push", "push", "pop", "peek", "isEmpty"
-    };
-    vector<vector<int>> inputs = {
-        {}, {4}, {8}, {}, {}, {}
-    };
-
-    for (int i = 0; i < commands.size(); i++) {
-        if (commands[i] == "StackQueue") {
-            cout << "null ";
-        } else if (commands[i] == "push") {
-            q.push(inputs[i][0]);
-            cout << "null ";
-        } else if (commands[i] == "pop") {
-            cout << q.pop() << " ";
-        } else if (commands[i] == "peek") {
-            cout << q.peek() << " ";
-        } else if (commands[i] == "isEmpty") {
-            cout << (q.isEmpty() ? "true" : "false") << " ";
-        }
+public:
+    void push(int x) {
+        input.push(x);
     }
+
+    int pop() {
+        if (output.empty()) {
+            while (!input.empty()) {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        if (output.empty()) return -1;
+
+        int val = output.top();
+        output.pop();
+        return val;
+    }
+
+    int peek() {
+        if (output.empty()) {
+            while (!input.empty()) {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        if (output.empty()) return -1;
+
+        return output.top();
+    }
+
+    bool isEmpty() {
+        return input.empty() && output.empty();
+    }
+};
+
+int main() {
+    cout << "Method 1 (Costly Push):\n";
+    StackQueue_Method1 q1;
+    q1.push(3);
+    q1.push(4);
+    cout << q1.pop() << endl;
+    q1.push(5);
+    cout << q1.peek() << endl;
+    cout << (q1.isEmpty() ? "Empty" : "Not Empty") << endl;
+
+    cout << "\nMethod 2 (Optimized):\n";
+    StackQueue_Method2 q2;
+    q2.push(3);
+    q2.push(4);
+    cout << q2.pop() << endl;
+    q2.push(5);
+    cout << q2.peek() << endl;
+    cout << (q2.isEmpty() ? "Empty" : "Not Empty") << endl;
 
     return 0;
 }
