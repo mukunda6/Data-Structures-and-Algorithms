@@ -1,0 +1,32 @@
+// Problem: Contains Duplicate
+// Platform: LeetCode / CodeChef
+// Approach: Hash Map
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if array contains duplicate elements
+bool containsDuplicate(vector<int>& nums) {
+    unordered_map<int, int> m;
+
+    for (int i = 0; i < nums.size(); i++) {
+        m[nums[i]]++;
+        if (m[nums[i]] > 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    // Example test cases
+    vector<int> nums1 = {1, 2, 3, 1};
+    vector<int> nums2 = {1, 2, 3, 4};
+
+    cout << containsDuplicate(nums1) << endl; // 1 (true)
+    cout << containsDuplicate(nums2) << endl; // 0 (false)
+
+    return 0;
+}
