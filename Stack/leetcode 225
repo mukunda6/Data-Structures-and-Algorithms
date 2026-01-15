@@ -1,0 +1,74 @@
+// Problem: Implement Stack using Queue (Single Queue)
+// Platform: LeetCode / CodeChef
+// Time Complexity:
+//   push  -> O(n)
+//   pop   -> O(1)
+//   top   -> O(1)
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Stack implementation using a single queue
+class QueueStack {
+    queue<int> q;
+
+public:
+    // Push element onto stack
+    void push(int x) {
+        int s = q.size();
+        q.push(x);
+
+        // Rotate the queue
+        for (int i = 0; i < s; i++) {
+            q.push(q.front());
+            q.pop();
+        }
+    }
+
+    // Remove the top element
+    int pop() {
+        int val = q.front();
+        q.pop();
+        return val;
+    }
+
+    // Get the top element
+    int top() {
+        return q.front();
+    }
+
+    // Check if stack is empty
+    bool isEmpty() {
+        return q.empty();
+    }
+};
+
+int main() {
+    QueueStack st;
+
+    // Simulating operations
+    vector<string> commands = {
+        "QueueStack", "push", "push", "pop", "top", "isEmpty"
+    };
+    vector<vector<int>> inputs = {
+        {}, {4}, {8}, {}, {}, {}
+    };
+
+    for (int i = 0; i < commands.size(); i++) {
+        if (commands[i] == "QueueStack") {
+            cout << "null ";
+        } else if (commands[i] == "push") {
+            st.push(inputs[i][0]);
+            cout << "null ";
+        } else if (commands[i] == "pop") {
+            cout << st.pop() << " ";
+        } else if (commands[i] == "top") {
+            cout << st.top() << " ";
+        } else if (commands[i] == "isEmpty") {
+            cout << (st.isEmpty() ? "true" : "false") << " ";
+        }
+    }
+
+    return 0;
+}
