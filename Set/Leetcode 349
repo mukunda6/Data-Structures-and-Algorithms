@@ -1,0 +1,38 @@
+// Problem: Intersection of Two Arrays
+// Platform: LeetCode / CodeChef
+// Approach: Hash Set
+// Time Complexity: O(n + m)
+// Space Complexity: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find intersection of two arrays
+vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+    unordered_set<int> s(nums1.begin(), nums1.end());
+    vector<int> ans;
+
+    for (int x : nums2) {
+        if (s.count(x)) {
+            ans.push_back(x);
+            s.erase(x); // ensure uniqueness
+        }
+    }
+    return ans;
+}
+
+int main() {
+    // Example test cases
+    vector<int> nums1 = {1, 2, 2, 1};
+    vector<int> nums2 = {2, 2};
+
+    vector<int> result = intersection(nums1, nums2);
+
+    cout << "Intersection: ";
+    for (int x : result) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
