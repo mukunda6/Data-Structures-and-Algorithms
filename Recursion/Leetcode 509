@@ -1,29 +1,70 @@
-// Problem: Fibonacci Number (Recursion)
-// Platform: LeetCode / CodeChef
-// Time Complexity: O(2^n)
-// Space Complexity: O(n)  // recursion stack
+// Problem: Fibonacci Number (All Approaches)
+// Approaches:
+// 1. Recursive (Brute Force)
+// 2. Dynamic Programming (Bottom-Up)
+// 3. Space Optimized (Best)
+//
+// Time Complexity:
+// Recursive: O(2^n)
+// DP: O(n)
+// Space Optimized: O(n)
+//
+// Space Complexity:
+// Recursive: O(n) (call stack)
+// DP: O(n)
+// Space Optimized: O(1)
 
 #include <bits/stdc++.h>
 using namespace std;
 
-// Recursive function to calculate Fibonacci number
-int fib(int n) {
-    // Base cases
-    if (n == 0 || n == 1) {
-        return n;
-    }
-
-    // Recursive case
-    return fib(n - 1) + fib(n - 2);
+//////////////////////////
+// 1️⃣ Recursive (Brute Force)
+//////////////////////////
+int fibRecursive(int n) {
+    if (n <= 1) return n;
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
 }
 
-int main() {
-    // Example test cases
-    int n1 = 5;
-    int n2 = 7;
+//////////////////////////
+// 2️⃣ DP – Bottom-Up (Array)
+//////////////////////////
+int fibDP(int n) {
+    if (n <= 1) return n;
 
-    cout << "fib(" << n1 << ") = " << fib(n1) << endl; // 5
-    cout << "fib(" << n2 << ") = " << fib(n2) << endl; // 13
+    vector<int> dp(n + 1);
+    dp[0] = 0;
+    dp[1] = 1;
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n];
+}
+
+//////////////////////////
+// 3️⃣ Space Optimized (Best)
+//////////////////////////
+int fibOptimized(int n) {
+    if (n <= 1) return n;
+
+    int prev2 = 0, prev1 = 1;
+    for (int i = 2; i <= n; i++) {
+        int curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}
+
+//////////////////////////
+// Main Function
+//////////////////////////
+int main() {
+    int n = 4;
+
+    cout << "Recursive Approach: " << fibRecursive(n) << endl;
+    cout << "DP (Bottom-Up): " << fibDP(n) << endl;
+    cout << "Space Optimized: " << fibOptimized(n) << endl;
 
     return 0;
 }
