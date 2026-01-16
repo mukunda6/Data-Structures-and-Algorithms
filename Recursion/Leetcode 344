@@ -1,3 +1,17 @@
+// Problem: Reverse String
+// Platform: LeetCode / CodeChef
+//
+// Approaches:
+// 1. Two Pointer Method (BEST)
+// 2. For Loop Method
+// 3. Recursive Method
+// 4. STL reverse() Method
+//
+// Time Complexity: O(n) for all methods
+// Space Complexity:
+// Two Pointer / For Loop / STL: O(1)
+// Recursive Method: O(n) (call stack)
+
 #include <bits/stdc++.h>
 using namespace std;
 
