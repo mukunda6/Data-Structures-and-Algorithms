@@ -1,0 +1,96 @@
+// Problem: Sqrt(x)
+// Platform: LeetCode / CodeChef
+//
+// Approaches:
+// 1. Binary Search (BEST – Interview Preferred)
+// 2. Linear Search (Brute Force)
+// 3. Newton’s Method
+// 4. Inbuilt sqrt()  (Not allowed in LeetCode)
+// 5. pow() Function (Not allowed in LeetCode)
+//
+// Time Complexity:
+// Binary Search: O(log x)
+// Linear Search: O(√x)
+// Newton’s Method: O(log x)
+// Inbuilt / pow(): O(1)
+//
+// Space Complexity: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    //////////////////////////////////////
+    // 1️⃣ Binary Search Method (BEST)
+    //////////////////////////////////////
+    int sqrtBinarySearch(int x) {
+        if (x < 2) return x;
+
+        int low = 1, high = x / 2;
+        int ans = 0;
+
+        while (low <= high) {
+            long long mid = low + (high - low) / 2;
+
+            if (mid * mid <= x) {
+                ans = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 2️⃣ Linear Search (Brute Force)
+    //////////////////////////////////////
+    int sqrtLinear(int x) {
+        long long i = 0;
+        while ((i + 1) * (i + 1) <= x) {
+            i++;
+        }
+        return i;
+    }
+
+    //////////////////////////////////////
+    // 3️⃣ Newton’s Method
+    //////////////////////////////////////
+    int sqrtNewton(int x) {
+        if (x == 0) return 0;
+
+        long long r = x;
+        while (r * r > x) {
+            r = (r + x / r) / 2;
+        }
+        return r;
+    }
+
+    //////////////////////////////////////
+    // 4️⃣ Inbuilt sqrt() Method
+    //////////////////////////////////////
+    int sqrtInbuilt(int x) {
+        return (int)sqrt(x);
+    }
+
+    //////////////////////////////////////
+    // 5️⃣ pow() Function Method
+    //////////////////////////////////////
+    int sqrtUsingPow(int x) {
+        return (int)pow(x, 0.5);
+    }
+};
+
+int main() {
+    int x = 8;
+    Solution obj;
+
+    cout << "Binary Search Result : " << obj.sqrtBinarySearch(x) << endl;
+    cout << "Linear Search Result : " << obj.sqrtLinear(x) << endl;
+    cout << "Newton Method Result : " << obj.sqrtNewton(x) << endl;
+    cout << "Inbuilt sqrt Result  : " << obj.sqrtInbuilt(x) << endl;
+    cout << "pow() Function Result: " << obj.sqrtUsingPow(x) << endl;
+
+    return 0;
+}
