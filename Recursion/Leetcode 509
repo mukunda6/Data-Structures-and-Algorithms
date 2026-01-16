@@ -1,0 +1,29 @@
+// Problem: Fibonacci Number (Recursion)
+// Platform: LeetCode / CodeChef
+// Time Complexity: O(2^n)
+// Space Complexity: O(n)  // recursion stack
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Recursive function to calculate Fibonacci number
+int fib(int n) {
+    // Base cases
+    if (n == 0 || n == 1) {
+        return n;
+    }
+
+    // Recursive case
+    return fib(n - 1) + fib(n - 2);
+}
+
+int main() {
+    // Example test cases
+    int n1 = 5;
+    int n2 = 7;
+
+    cout << "fib(" << n1 << ") = " << fib(n1) << endl; // 5
+    cout << "fib(" << n2 << ") = " << fib(n2) << endl; // 13
+
+    return 0;
+}
