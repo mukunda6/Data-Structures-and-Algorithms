@@ -1,0 +1,124 @@
+// Problem: Counting Bits
+// Platform: LeetCode / CodeChef
+//
+// Approaches:
+// 1. Brute Force (Bit checking)
+// 2. Brian Kernighan for each number
+// 3. DP using Right Shift
+// 4. DP using Offset (Power of Two)
+// 5. Built-in Function (__builtin_popcount)
+//
+// Time Complexity:
+// Brute / Kernighan: O(n log n)
+// DP (Shift / Offset): O(n)
+// Built-in: O(n)
+//
+// Space Complexity:
+// All approaches: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    //////////////////////////////////////
+    // 1️⃣ Brute Force (O(n log n))
+    //////////////////////////////////////
+    vector<int> countBitsBrute(int n) {
+        vector<int> ans(n + 1);
+        for (int i = 0; i <= n; i++) {
+            int x = i, cnt = 0;
+            while (x) {
+                cnt += (x & 1);
+                x >>= 1;
+            }
+            ans[i] = cnt;
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 2️⃣ Brian Kernighan (O(n log n))
+    //////////////////////////////////////
+    vector<int> countBitsKernighan(int n) {
+        vector<int> ans(n + 1);
+        for (int i = 0; i <= n; i++) {
+            int x = i, cnt = 0;
+            while (x) {
+                x = x & (x - 1);
+                cnt++;
+            }
+            ans[i] = cnt;
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 3️⃣ DP using Right Shift (O(n))
+    //////////////////////////////////////
+    vector<int> countBitsShift(int n) {
+        vector<int> ans(n + 1, 0);
+        for (int i = 1; i <= n; i++) {
+            ans[i] = ans[i >> 1] + (i & 1);
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 4️⃣ DP using Offset / Power of Two (O(n))
+    //////////////////////////////////////
+    vector<int> countBitsOffset(int n) {
+        vector<int> ans(n + 1, 0);
+        int offset = 1;
+        for (int i = 1; i <= n; i++) {
+            if (i == offset * 2)
+                offset *= 2;
+            ans[i] = 1 + ans[i - offset];
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 5️⃣ Built-in Function
+    //////////////////////////////////////
+    vector<int> countBitsBuiltin(int n) {
+        vector<int> ans(n + 1);
+        for (int i = 0; i <= n; i++) {
+            ans[i] = __builtin_popcount(i);
+        }
+        return ans;
+    }
+};
+
+int main() {
+    int n = 5;
+    Solution obj;
+
+    auto res1 = obj.countBitsBrute(n);
+    auto res2 = obj.countBitsKernighan(n);
+    auto res3 = obj.countBitsShift(n);
+    auto res4 = obj.countBitsOffset(n);
+    auto res5 = obj.countBitsBuiltin(n);
+
+    cout << "Brute Force        : ";
+    for (int x : res1) cout << x << " ";
+    cout << endl;
+
+    cout << "Kernighan          : ";
+    for (int x : res2) cout << x << " ";
+    cout << endl;
+
+    cout << "DP Right Shift     : ";
+    for (int x : res3) cout << x << " ";
+    cout << endl;
+
+    cout << "DP Offset Method   : ";
+    for (int x : res4) cout << x << " ";
+    cout << endl;
+
+    cout << "Built-in popcount  : ";
+    for (int x : res5) cout << x << " ";
+    cout << endl;
+
+    return 0;
+}
