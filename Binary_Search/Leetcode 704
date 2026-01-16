@@ -1,38 +1,86 @@
-// Problem: Binary Search
+// Problem: Binary Search (All Approaches)
 // Platform: LeetCode / CodeChef
-// Time Complexity: O(log n)
-// Space Complexity: O(1)
+//
+// Approaches:
+// 1. Recursive Binary Search
+// 2. Iterative Binary Search
+// 3. STL Binary Search (binary_search + lower_bound)
+//
+// Time Complexity: O(log n) for all
+// Space Complexity:
+// Recursive: O(log n)
+// Iterative / STL: O(1)
 
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to perform binary search
-int binarySearch(vector<int>& nums, int target) {
-    int low = 0;
-    int high = nums.size() - 1;
+class Solution {
+public:
+    //////////////////////////////////////////////////
+    // 1️⃣ Recursive Binary Search
+    //////////////////////////////////////////////////
+    int binarySearchRecursive(vector<int>& nums, int low, int high, int target) {
+        if (low > high) return -1;
 
-    while (low <= high) {
         int mid = low + (high - low) / 2;
 
-        if (nums[mid] == target) {
+        if (nums[mid] == target)
             return mid;
-        } else if (target > nums[mid]) {
-            low = mid + 1;
-        } else {
-            high = mid - 1;
-        }
+        else if (target > nums[mid])
+            return binarySearchRecursive(nums, mid + 1, high, target);
+        else
+            return binarySearchRecursive(nums, low, mid - 1, target);
     }
-    return -1;
-}
+
+    int searchRecursive(vector<int>& nums, int target) {
+        return binarySearchRecursive(nums, 0, nums.size() - 1, target);
+    }
+
+    //////////////////////////////////////////////////
+    // 2️⃣ Iterative Binary Search
+    //////////////////////////////////////////////////
+    int binarySearchIterative(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+            else if (target > nums[mid])
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return -1;
+    }
+
+    //////////////////////////////////////////////////
+    // 3️⃣ STL Binary Search
+    //////////////////////////////////////////////////
+    int binarySearchSTL(vector<int>& nums, int target) {
+        if (!binary_search(nums.begin(), nums.end(), target))
+            return -1;
+
+        auto it = lower_bound(nums.begin(), nums.end(), target);
+        return it - nums.begin();
+    }
+};
 
 int main() {
-    // Example test cases
-    vector<int> nums = {1, 3, 5, 7, 9, 11};
-    int target1 = 7;
-    int target2 = 4;
+    vector<int> arr = {3, 4, 6, 7, 9, 12, 16, 17};
+    int target = 6;
 
-    cout << "Search 7: " << binarySearch(nums, target1) << endl; // 3
-    cout << "Search 4: " << binarySearch(nums, target2) << endl; // -1
+    Solution obj;
+
+    cout << "Recursive Binary Search Index: "
+         << obj.searchRecursive(arr, target) << endl;
+
+    cout << "Iterative Binary Search Index: "
+         << obj.binarySearchIterative(arr, target) << endl;
+
+    cout << "STL Binary Search Index: "
+         << obj.binarySearchSTL(arr, target) << endl;
 
     return 0;
 }
