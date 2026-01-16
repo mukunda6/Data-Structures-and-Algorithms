@@ -1,0 +1,100 @@
+// Problem: Number of 1 Bits (Hamming Weight)
+// Platform: LeetCode / CodeChef
+//
+// Approaches:
+// 1. Brute Force (Division / Modulo)
+// 2. Bitwise AND (& 1) + Right Shift
+// 3. Brian Kernighan’s Algorithm (BEST)
+// 4. Built-in Function (__builtin_popcount)
+// 5. Precomputation Method (Follow-up)
+//
+// Time Complexity:
+// Brute / Bitwise: O(32)
+// Kernighan: O(number of set bits)
+// Built-in: O(1)
+// Precomputation: O(1)
+//
+// Space Complexity: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    //////////////////////////////////////
+    // 1️⃣ Brute Force (Division / Modulo)
+    //////////////////////////////////////
+    int hammingWeightBrute(int n) {
+        int count = 0;
+        while (n > 0) {
+            if (n % 2 == 1) count++;
+            n = n / 2;
+        }
+        return count;
+    }
+
+    //////////////////////////////////////
+    // 2️⃣ Bitwise AND (& 1) + Right Shift
+    //////////////////////////////////////
+    int hammingWeightBitwise(int n) {
+        int count = 0;
+        while (n > 0) {
+            count += (n & 1);
+            n >>= 1;
+        }
+        return count;
+    }
+
+    //////////////////////////////////////
+    // 3️⃣ Brian Kernighan’s Algorithm (BEST)
+    //////////////////////////////////////
+    int hammingWeightKernighan(int n) {
+        int count = 0;
+        while (n > 0) {
+            n = n & (n - 1); // removes lowest set bit
+            count++;
+        }
+        return count;
+    }
+
+    //////////////////////////////////////
+    // 4️⃣ Built-in Function
+    //////////////////////////////////////
+    int hammingWeightBuiltin(int n) {
+        return __builtin_popcount(n);
+    }
+
+    //////////////////////////////////////
+    // 5️⃣ Precomputation Method
+    //////////////////////////////////////
+    int hammingWeightPrecompute(int n) {
+        static int table[256] = {0};
+        static bool built = false;
+
+        if (!built) {
+            for (int i = 1; i < 256; i++) {
+                table[i] = table[i >> 1] + (i & 1);
+            }
+            built = true;
+        }
+
+        return table[n & 0xff] +
+               table[(n >> 8) & 0xff] +
+               table[(n >> 16) & 0xff] +
+               table[(n >> 24) & 0xff];
+    }
+};
+
+int main() {
+    int n = 11; // binary: 1011
+
+    Solution obj;
+
+    cout << "Brute Force Method       : " << obj.hammingWeightBrute(n) << endl;
+    cout << "Bitwise AND Method       : " << obj.hammingWeightBitwise(n) << endl;
+    cout << "Kernighan’s Algorithm    : " << obj.hammingWeightKernighan(n) << endl;
+    cout << "Built-in popcount        : " << obj.hammingWeightBuiltin(n) << endl;
+    cout << "Precomputation Method    : " << obj.hammingWeightPrecompute(n) << endl;
+
+    return 0;
+}
