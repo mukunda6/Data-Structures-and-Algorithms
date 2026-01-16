@@ -1,0 +1,93 @@
+// Problem: Power of Four
+// Platform: LeetCode / CodeChef
+//
+// ------------------------------------------------------------
+// Approaches:
+// 1. Division Method (Loop)
+// 2. Recursive Method
+// 3. Logarithm Method (Not Recommended)
+// 4. Bit Manipulation Method (BEST)
+// 5. Math Trick Method (O(1))
+// ------------------------------------------------------------
+//
+// Time Complexity:
+// Division / Recursion: O(log n)
+// Log / Bit / Math: O(1)
+//
+// Space Complexity:
+// Recursion: O(log n)
+// Others: O(1)
+// ------------------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+/////////////////////////////////////////////////
+// 1️⃣ Division Method (Loop)
+/////////////////////////////////////////////////
+bool isPowerOfFour_Division(int n) {
+    if (n <= 0) return false;
+    while (n % 4 == 0) {
+        n /= 4;
+    }
+    return n == 1;
+}
+
+/////////////////////////////////////////////////
+// 2️⃣ Recursive Method
+/////////////////////////////////////////////////
+bool isPowerOfFour_Recursive(int n) {
+    if (n == 1) return true;
+    if (n <= 0 || n % 4 != 0) return false;
+    return isPowerOfFour_Recursive(n / 4);
+}
+
+/////////////////////////////////////////////////
+// 3️⃣ Logarithm Method (Not Recommended)
+/////////////////////////////////////////////////
+bool isPowerOfFour_Log(int n) {
+    if (n <= 0) return false;
+    double val = log(n) / log(4);
+    return fabs(val - round(val)) < 1e-10;
+}
+
+/////////////////////////////////////////////////
+// 4️⃣ Bit Manipulation Method (BEST – No Loop)
+/////////////////////////////////////////////////
+bool isPowerOfFour_Bit(int n) {
+    return n > 0 &&
+           (n & (n - 1)) == 0 &&   // power of two
+           (n & 0x55555555);      // bit at even position
+}
+
+/////////////////////////////////////////////////
+// 5️⃣ Math Trick Method (O(1))
+/////////////////////////////////////////////////
+bool isPowerOfFour_Math(int n) {
+    // 4^15 = 1073741824 (largest power of 4 in 32-bit int)
+    return n > 0 && 1073741824 % n == 0;
+}
+
+/////////////////////////////////////////////////
+// Main Function
+/////////////////////////////////////////////////
+int main() {
+    int n = 16;
+
+    cout << "Division Method: "
+         << (isPowerOfFour_Division(n) ? "true" : "false") << endl;
+
+    cout << "Recursive Method: "
+         << (isPowerOfFour_Recursive(n) ? "true" : "false") << endl;
+
+    cout << "Logarithm Method: "
+         << (isPowerOfFour_Log(n) ? "true" : "false") << endl;
+
+    cout << "Bit Manipulation Method: "
+         << (isPowerOfFour_Bit(n) ? "true" : "false") << endl;
+
+    cout << "Math Trick Method: "
+         << (isPowerOfFour_Math(n) ? "true" : "false") << endl;
+
+    return 0;
+}
