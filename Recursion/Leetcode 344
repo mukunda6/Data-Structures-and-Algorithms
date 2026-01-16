@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/////////////////////////////////////////////////
+// 1️⃣ Two Pointer Method (BEST)
+/////////////////////////////////////////////////
+void reverse_TwoPointer(vector<char>& s) {
+    int left = 0, right = s.size() - 1;
+    while (left < right) {
+        swap(s[left], s[right]);
+        left++;
+        right--;
+    }
+}
+
+/////////////////////////////////////////////////
+// 2️⃣ For Loop Method
+/////////////////////////////////////////////////
+void reverse_ForLoop(vector<char>& s) {
+    int n = s.size();
+    for (int i = 0; i < n / 2; i++) {
+        swap(s[i], s[n - i - 1]);
+    }
+}
+
+/////////////////////////////////////////////////
+// 3️⃣ Recursive Method
+/////////////////////////////////////////////////
+void reverse_Recursive_Helper(vector<char>& s, int left, int right) {
+    if (left >= right) return;
+    swap(s[left], s[right]);
+    reverse_Recursive_Helper(s, left + 1, right - 1);
+}
+
+void reverse_Recursive(vector<char>& s) {
+    reverse_Recursive_Helper(s, 0, s.size() - 1);
+}
+
+/////////////////////////////////////////////////
+// 4️⃣ STL Built-in reverse() Method
+/////////////////////////////////////////////////
+void reverse_STL(vector<char>& s) {
+    reverse(s.begin(), s.end());
+}
+
+/////////////////////////////////////////////////
+// Main Function
+/////////////////////////////////////////////////
+int main() {
+    vector<char> s1 = {'h','e','l','l','o'};
+    vector<char> s2 = s1;
+    vector<char> s3 = s1;
+    vector<char> s4 = s1;
+
+    reverse_TwoPointer(s1);
+    reverse_ForLoop(s2);
+    reverse_Recursive(s3);
+    reverse_STL(s4);
+
+    cout << "Two Pointer Method: ";
+    for (char c : s1) cout << c << " ";
+    cout << endl;
+
+    cout << "For Loop Method: ";
+    for (char c : s2) cout << c << " ";
+    cout << endl;
+
+    cout << "Recursive Method: ";
+    for (char c : s3) cout << c << " ";
+    cout << endl;
+
+    cout << "STL reverse() Method: ";
+    for (char c : s4) cout << c << " ";
+    cout << endl;
+
+    return 0;
+}
