@@ -1,0 +1,91 @@
+// Problem: Power of Three
+// Platform: LeetCode / CodeChef
+//
+// Approaches:
+// 1. Iterative Division
+// 2. Recursion
+// 3. Logarithm (log10)
+// 4. Logarithm (natural log)
+// 5. Math Trick (Best)
+//
+// Time Complexity:
+// Division / Recursion: O(log n)
+// Log methods: O(1)
+// Math Trick: O(1)
+//
+// Space Complexity:
+// Recursion: O(log n)
+// Others: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+/////////////////////////////////////////////////
+// 1️⃣ Iterative Division Method
+/////////////////////////////////////////////////
+bool isPowerOfThree_Division(int n) {
+    if (n <= 0) return false;
+    while (n % 3 == 0) {
+        n /= 3;
+    }
+    return n == 1;
+}
+
+/////////////////////////////////////////////////
+// 2️⃣ Recursive Method
+/////////////////////////////////////////////////
+bool isPowerOfThree_Recursive(int n) {
+    if (n == 1) return true;
+    if (n <= 0 || n % 3 != 0) return false;
+    return isPowerOfThree_Recursive(n / 3);
+}
+
+/////////////////////////////////////////////////
+// 3️⃣ Logarithm Method (log10)
+/////////////////////////////////////////////////
+bool isPowerOfThree_Log10(int n) {
+    if (n <= 0) return false;
+    double val = log10(n) / log10(3);
+    return fabs(val - round(val)) < 1e-10;
+}
+
+/////////////////////////////////////////////////
+// 4️⃣ Logarithm Method (natural log)
+/////////////////////////////////////////////////
+bool isPowerOfThree_Log(int n) {
+    if (n <= 0) return false;
+    double val = log(n) / log(3);
+    return fabs(val - round(val)) < 1e-10;
+}
+
+/////////////////////////////////////////////////
+// 5️⃣ Math Trick Method (BEST – O(1))
+/////////////////////////////////////////////////
+bool isPowerOfThree_Math(int n) {
+    // 3^19 = 1162261467 (largest power of 3 in 32-bit int)
+    return n > 0 && 1162261467 % n == 0;
+}
+
+/////////////////////////////////////////////////
+// Main Function
+/////////////////////////////////////////////////
+int main() {
+    int n = 27;
+
+    cout << "Division Method: "
+         << (isPowerOfThree_Division(n) ? "true" : "false") << endl;
+
+    cout << "Recursive Method: "
+         << (isPowerOfThree_Recursive(n) ? "true" : "false") << endl;
+
+    cout << "Log10 Method: "
+         << (isPowerOfThree_Log10(n) ? "true" : "false") << endl;
+
+    cout << "Log Method: "
+         << (isPowerOfThree_Log(n) ? "true" : "false") << endl;
+
+    cout << "Math Trick Method: "
+         << (isPowerOfThree_Math(n) ? "true" : "false") << endl;
+
+    return 0;
+}
