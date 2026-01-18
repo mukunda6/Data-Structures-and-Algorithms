@@ -1,0 +1,102 @@
+// Problem: Reverse Bits
+// Platform: LeetCode / CodeChef / GitHub
+//
+// Approaches:
+// 1. Bit-by-Bit (Interview Standard)
+// 2. String Method (Not Recommended)
+// 3. Bit Mask Swapping (Optimized)
+// 4. Lookup Table (Best for Repeated Calls)
+//
+// Time Complexity:
+// Bit-by-Bit: O(32)
+// String: O(32)
+// Bit Swap: O(1)
+// Lookup Table: O(1)
+//
+// Space Complexity:
+// Bit-by-Bit / Bit Swap: O(1)
+// String / Lookup Table: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*-------------------------------------------------
+      1️⃣ Bit-by-Bit (Most Common – Interview)
+    -------------------------------------------------*/
+    int reverseBits_BitByBit(int n) {
+        unsigned int ans = 0;
+        for (int i = 0; i < 32; i++) {
+            ans = (ans << 1) | (n & 1);
+            n >>= 1;
+        }
+        return ans;
+    }
+
+    /*-------------------------------------------------
+      2️⃣ Using String (Not Recommended)
+    -------------------------------------------------*/
+    int reverseBits_String(int n) {
+        string bin = bitset<32>(n).to_string();
+        reverse(bin.begin(), bin.end());
+        return (int)bitset<32>(bin).to_ulong();
+    }
+
+    /*-------------------------------------------------
+      3️⃣ Bit Mask Swapping (Fastest – No Extra Memory)
+    -------------------------------------------------*/
+    int reverseBits_BitSwap(int n) {
+        unsigned int x = n;
+        x = (x >> 16) | (x << 16);
+        x = ((x & 0xff00ff00) >> 8) | ((x & 0x00ff00ff) << 8);
+        x = ((x & 0xf0f0f0f0) >> 4) | ((x & 0x0f0f0f0f) << 4);
+        x = ((x & 0xcccccccc) >> 2) | ((x & 0x33333333) << 2);
+        x = ((x & 0xaaaaaaaa) >> 1) | ((x & 0x55555555) << 1);
+        return x;
+    }
+
+    /*-------------------------------------------------
+      4️⃣ Lookup Table (Best for Repeated Calls)
+    -------------------------------------------------*/
+    unsigned int table[256];
+
+    void buildTable() {
+        for (int i = 0; i < 256; i++) {
+            unsigned int x = i, rev = 0;
+            for (int j = 0; j < 8; j++) {
+                rev = (rev << 1) | (x & 1);
+                x >>= 1;
+            }
+            table[i] = rev;
+        }
+    }
+
+    int reverseBits_Lookup(int n) {
+        unsigned int x = n;
+        return (table[x & 0xff] << 24) |
+               (table[(x >> 8) & 0xff] << 16) |
+               (table[(x >> 16) & 0xff] << 8) |
+               (table[(x >> 24) & 0xff]);
+    }
+
+    /*-------------------------------------------------
+      Default Method
+    -------------------------------------------------*/
+    int reverseBits(int n) {
+        buildTable();
+        return reverseBits_Lookup(n);
+    }
+};
+
+int main() {
+    Solution obj;
+    int n = 43261596; // example input
+
+    cout << "Bit-by-Bit        : " << obj.reverseBits_BitByBit(n) << endl;
+    cout << "String Method     : " << obj.reverseBits_String(n) << endl;
+    cout << "Bit Swap Method   : " << obj.reverseBits_BitSwap(n) << endl;
+    cout << "Lookup Table      : " << obj.reverseBits(n) << endl;
+
+    return 0;
+}
