@@ -1,0 +1,87 @@
+// Problem: Invert Binary Tree
+// Platform: LeetCode / CodeChef / GitHub
+//
+// -------------------------------------------------
+// Approach: Recursion (DFS)
+// -------------------------------------------------
+// Idea:
+// - Swap left and right child of every node
+// - Recursively invert subtrees
+//
+// Time Complexity: O(n)
+// Space Complexity: O(h)  [recursion stack]
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Definition for a binary tree node
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int x) {
+        val = x;
+        left = right = NULL;
+    }
+};
+
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == NULL) {
+            return NULL;
+        }
+
+        // Swap left and right subtrees
+        swap(root->left, root->right);
+
+        // Recursively invert children
+        invertTree(root->left);
+        invertTree(root->right);
+
+        return root;
+    }
+};
+
+// Helper function: Inorder traversal (for checking)
+void inorder(TreeNode* root) {
+    if (!root) return;
+    inorder(root->left);
+    cout << root->val << " ";
+    inorder(root->right);
+}
+
+int main() {
+    /*
+        Original Tree:
+              4
+             / \
+            2   7
+           / \ / \
+          1  3 6  9
+    */
+
+    TreeNode* root = new TreeNode(4);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(7);
+    root->left->left = new TreeNode(1);
+    root->left->right = new TreeNode(3);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(9);
+
+    Solution obj;
+
+    cout << "Inorder before inversion: ";
+    inorder(root);
+    cout << endl;
+
+    obj.invertTree(root);
+
+    cout << "Inorder after inversion : ";
+    inorder(root);
+    cout << endl;
+
+    return 0;
+}
