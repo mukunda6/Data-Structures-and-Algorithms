@@ -1,0 +1,88 @@
+// Problem: Palindrome Number
+// Platform: LeetCode / CodeChef / GitHub
+//
+// -------------------------------------------------
+// Approaches:
+// 1. String Method (Easy – Not Follow-up)
+// 2. Reverse Full Number (Math)
+// 3. Reverse Half Number (BEST – Follow-up)
+// -------------------------------------------------
+//
+// Time Complexity:
+// String Method: O(n)
+// Full Reverse: O(log n)
+// Half Reverse: O(log n)
+//
+// Space Complexity:
+// String Method: O(n)
+// Full / Half Reverse: O(1)
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*-------------------------------------------------
+      APPROACH 1: String Method
+    -------------------------------------------------*/
+    bool palindrome_String(int x) {
+        if (x < 0) return false;
+        string s = to_string(x);
+        string rev = s;
+        reverse(rev.begin(), rev.end());
+        return s == rev;
+    }
+
+    /*-------------------------------------------------
+      APPROACH 2: Reverse Full Number (Math)
+    -------------------------------------------------*/
+    bool palindrome_FullReverse(int x) {
+        if (x < 0) return false;
+
+        int temp = x;
+        long long rev = 0;
+
+        while (x > 0) {
+            rev = rev * 10 + x % 10;
+            x /= 10;
+        }
+        return temp == rev;
+    }
+
+    /*-------------------------------------------------
+      APPROACH 3: Reverse Half Number (BEST)
+    -------------------------------------------------*/
+    bool palindrome_HalfReverse(int x) {
+        if (x < 0 || (x % 10 == 0 && x != 0))
+            return false;
+
+        int rev = 0;
+        while (x > rev) {
+            rev = rev * 10 + x % 10;
+            x /= 10;
+        }
+        return (x == rev || x == rev / 10);
+    }
+
+    /*-------------------------------------------------
+      MAIN FUNCTION USED BY LEETCODE
+    -------------------------------------------------*/
+    bool isPalindrome(int x) {
+        return palindrome_HalfReverse(x); // recommended
+    }
+};
+
+int main() {
+    Solution obj;
+
+    int x1 = 121;
+    int x2 = -121;
+    int x3 = 10;
+
+    cout << "121 -> " << obj.isPalindrome(x1) << endl;
+    cout << "-121 -> " << obj.isPalindrome(x2) << endl;
+    cout << "10 -> " << obj.isPalindrome(x3) << endl;
+
+    return 0;
+}
