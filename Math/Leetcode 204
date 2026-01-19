@@ -1,0 +1,106 @@
+// Problem: Count Primes
+// Platform: LeetCode / CodeChef / GitHub
+//
+// -------------------------------------------------
+// Approaches:
+// 1. Brute Force (TLE)
+// 2. Optimized Brute (Skip Even Numbers)
+// 3. Sieve of Eratosthenes (BEST)
+// -------------------------------------------------
+//
+// Time Complexity:
+// Brute / Optimized: O(n * sqrt(n))
+// Sieve: O(n log log n)
+//
+// Space Complexity:
+// Brute / Optimized: O(1)
+// Sieve: O(n)
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*-------------------------------------------------
+      Helper: Check Prime (used by brute methods)
+    -------------------------------------------------*/
+    bool isPrime(int x) {
+        if (x <= 1) return false;
+        for (int i = 2; i * i <= x; i++) {
+            if (x % i == 0)
+                return false;
+        }
+        return true;
+    }
+
+    /*-------------------------------------------------
+      APPROACH 1: Brute Force (TLE)
+    -------------------------------------------------*/
+    int countPrimes_Brute(int n) {
+        int cnt = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime(i))
+                cnt++;
+        }
+        return cnt;
+    }
+
+    /*-------------------------------------------------
+      APPROACH 2: Optimized Brute (Skip Evens)
+    -------------------------------------------------*/
+    int countPrimes_Optimized(int n) {
+        if (n <= 2) return 0;
+
+        int cnt = 1; // prime number 2
+        for (int i = 3; i < n; i += 2) {
+            if (isPrime(i))
+                cnt++;
+        }
+        return cnt;
+    }
+
+    /*-------------------------------------------------
+      APPROACH 3: Sieve of Eratosthenes (BEST)
+    -------------------------------------------------*/
+    int countPrimes_Sieve(int n) {
+        if (n <= 2) return 0;
+
+        vector<bool> isPrime(n, true);
+        isPrime[0] = isPrime[1] = false;
+
+        for (int i = 2; i * i < n; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j < n; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+
+        int cnt = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i])
+                cnt++;
+        }
+        return cnt;
+    }
+
+    /*-------------------------------------------------
+      MAIN FUNCTION USED BY LEETCODE
+    -------------------------------------------------*/
+    int countPrimes(int n) {
+        return countPrimes_Sieve(n); // recommended
+    }
+};
+
+int main() {
+    Solution obj;
+
+    int n1 = 10;
+    int n2 = 100;
+
+    cout << "Primes less than 10  : " << obj.countPrimes(n1) << endl;   // 4
+    cout << "Primes less than 100 : " << obj.countPrimes(n2) << endl;   // 25
+
+    return 0;
+}
