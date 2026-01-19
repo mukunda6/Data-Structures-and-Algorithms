@@ -1,0 +1,73 @@
+// Problem: Symmetric Tree
+// Platform: LeetCode / CodeChef / GitHub
+//
+// -------------------------------------------------
+// Approach: Recursion (DFS)
+// -------------------------------------------------
+// Idea:
+// - A tree is symmetric if left subtree is a mirror
+//   of the right subtree
+// - Compare:
+//   left->left  with right->right
+//   left->right with right->left
+//
+// Time Complexity: O(n)
+// Space Complexity: O(h) [recursion stack]
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Definition for a binary tree node
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int x) {
+        val = x;
+        left = right = NULL;
+    }
+};
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        return root == NULL || isMirror(root->left, root->right);
+    }
+
+    bool isMirror(TreeNode* left, TreeNode* right) {
+        if (left == NULL && right == NULL) return true;
+        if (left == NULL || right == NULL) return false;
+        if (left->val != right->val) return false;
+
+        return isMirror(left->left, right->right) &&
+               isMirror(left->right, right->left);
+    }
+};
+
+int main() {
+    /*
+        Symmetric Tree:
+                1
+               / \
+              2   2
+             / \ / \
+            3  4 4  3
+    */
+
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(2);
+    root->left->left = new TreeNode(3);
+    root->left->right = new TreeNode(4);
+    root->right->left = new TreeNode(4);
+    root->right->right = new TreeNode(3);
+
+    Solution obj;
+
+    cout << "Is tree symmetric? "
+         << (obj.isSymmetric(root) ? "Yes" : "No") << endl;
+
+    return 0;
+}
