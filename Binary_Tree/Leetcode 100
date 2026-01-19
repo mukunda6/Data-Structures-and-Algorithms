@@ -1,0 +1,68 @@
+// Problem: Same Tree
+// Platform: LeetCode / CodeChef / GitHub
+//
+// -------------------------------------------------
+// Approach: Recursion (DFS)
+// -------------------------------------------------
+// Idea:
+// - If both nodes are NULL → same
+// - If one is NULL → not same
+// - Values must match
+// - Left subtree and right subtree must be same
+//
+// Time Complexity: O(n)
+// Space Complexity: O(h) [recursion stack]
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Definition for a binary tree node
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int x) {
+        val = x;
+        left = right = NULL;
+    }
+};
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == NULL || q == NULL) {
+            return p == q;   // both NULL → true, else false
+        }
+
+        bool isLeftSame = isSameTree(p->left, q->left);
+        bool isRightSame = isSameTree(p->right, q->right);
+
+        return isLeftSame && isRightSame && p->val == q->val;
+    }
+};
+
+int main() {
+    /*
+        Tree 1:        Tree 2:
+            1              1
+           / \            / \
+          2   3          2   3
+    */
+
+    TreeNode* p = new TreeNode(1);
+    p->left = new TreeNode(2);
+    p->right = new TreeNode(3);
+
+    TreeNode* q = new TreeNode(1);
+    q->left = new TreeNode(2);
+    q->right = new TreeNode(3);
+
+    Solution obj;
+
+    cout << "Are both trees same? "
+         << (obj.isSameTree(p, q) ? "Yes" : "No") << endl;
+
+    return 0;
+}
