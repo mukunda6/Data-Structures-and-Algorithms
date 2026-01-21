@@ -1,0 +1,59 @@
+// Problem: Permutations
+// Platform: LeetCode / CodeChef
+//
+// -------------------------------------------------
+// Approach: Backtracking (Swap Method)
+// -------------------------------------------------
+// Idea:
+// - Fix one index
+// - Swap current index with every possible element
+// - Recurse
+// - Backtrack (swap back)
+//
+// Time Complexity: O(n!)
+// Space Complexity: O(n) [recursion stack]
+// -------------------------------------------------
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void getperms(vector<int>& nums,
+                  int idx,
+                  vector<vector<int>>& ans) {
+
+        if (idx == nums.size()) {
+            ans.push_back(nums);   // ✅ fixed
+            return;
+        }
+
+        for (int i = idx; i < nums.size(); i++) {
+            swap(nums[idx], nums[i]);     // choose
+            getperms(nums, idx + 1, ans); // explore
+            swap(nums[idx], nums[i]);     // backtrack
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        getperms(nums, 0, ans);
+        return ans;
+    }
+};
+
+int main() {
+    Solution obj;
+    vector<int> nums = {1, 2, 3};
+
+    vector<vector<int>> result = obj.permute(nums);
+
+    cout << "All Permutations:\n";
+    for (auto& p : result) {
+        cout << "[ ";
+        for (int x : p) cout << x << " ";
+        cout << "]\n";
+    }
+
+    return 0;
+}
