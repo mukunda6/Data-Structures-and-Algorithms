@@ -1,0 +1,132 @@
+# 🔁 Recursion – Complete Guide (C++)
+
+This repository contains a **complete guide to Recursion**
+with **definitions, types, and C++ programs**.
+
+Recursion is one of the most important concepts in
+**Data Structures, Algorithms, and Interviews**.
+
+---
+
+## 🔹 What is Recursion?
+
+Recursion is a programming technique where a function
+calls itself to solve a problem by breaking it into
+smaller sub-problems.
+
+Every recursive function must have:
+- **Base Case** – stops recursion
+- **Recursive Case** – function calls itself
+
+---
+
+## 📚 Types of Recursion Covered
+
+### 1️⃣ Direct Recursion
+A function calls itself directly.
+
+**Example:** Factorial  
+📌 Used in: factorial, sum, power
+
+---
+
+### 2️⃣ Indirect Recursion
+A function calls another function which then calls the first function.
+
+📌 Used in: mutually dependent logic
+
+---
+
+### 3️⃣ Tail Recursion
+Recursive call is the **last statement** in the function.
+
+📌 Faster & memory efficient  
+⚠️ C++ may optimize it
+
+---
+
+### 4️⃣ Non-Tail (Head) Recursion
+Some work is done **after** the recursive call.
+
+📌 Output depends on return path
+
+---
+
+### 5️⃣ Linear Recursion
+Only **one recursive call** per function call.
+
+📌 Time Complexity: **O(n)**
+
+---
+
+### 6️⃣ Binary Recursion
+Function makes **two recursive calls**.
+
+📌 Example: Fibonacci  
+📌 Time Complexity: **O(2ⁿ)**
+
+---
+
+### 7️⃣ Multiple (Tree) Recursion
+More than **two recursive calls**.
+
+📌 Used in: tree problems, DP
+
+---
+
+### 8️⃣ Nested Recursion
+A recursive call inside another recursive call.
+
+📌 Rare but asked in exams
+
+---
+
+### 9️⃣ Mutual Recursion
+Two or more functions call each other.
+
+📌 Used in: odd-even checks
+
+---
+
+### 🔟 Tree Recursion
+Each call generates multiple child calls.
+
+📌 Used in: backtracking, tree traversal
+
+---
+
+## 📊 Recursion Types Summary
+
+| Type | Recursive Calls | Example |
+|-----|-----------------|---------|
+| Direct | 1 | Factorial |
+| Indirect | ≥2 | A → B → A |
+| Tail | 1 (last) | Optimized factorial |
+| Non-Tail | 1 | Print numbers |
+| Linear | 1 | Sum |
+| Binary | 2 | Fibonacci |
+| Multiple | >2 | Staircase |
+| Nested | Inside call | McCarthy |
+| Mutual | 2 functions | Odd-Even |
+| Tree | Many | Backtracking |
+
+---
+
+## 🎯 Interview Tips
+- Always identify the **base case**
+- Draw the **recursion tree**
+- Know **time & space complexity**
+- Convert recursion to iteration if needed
+
+---
+
+## 🚀 Best Way to Learn Recursion
+1. Trace with small inputs
+2. Dry run on paper
+3. Understand call stack
+4. Practice problems daily
+
+---
+
+Happy Learning 🔥  
+Recursion becomes easy once you **visualize the calls** 🙂
