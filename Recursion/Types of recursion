@@ -1,104 +1,48 @@
-# 🔁 Recursion – Complete Guide (C++)
+# 🔁 Recursion – Complete Guide with Types & Programs (C++)
 
-This repository contains a **complete guide to Recursion**
-with **definitions, types, and C++ programs**.
+This repository contains a **complete explanation of Recursion**
+with **all recursion types, definitions, examples, and C++ programs**
+combined into a **single well-documented file**.
 
-Recursion is one of the most important concepts in
-**Data Structures, Algorithms, and Interviews**.
+Perfect for:
+- DSA learning
+- Interviews
+- Revision before exams
 
 ---
 
 ## 🔹 What is Recursion?
 
-Recursion is a programming technique where a function
-calls itself to solve a problem by breaking it into
-smaller sub-problems.
+Recursion is a technique where a function calls itself
+to solve a problem by breaking it into smaller sub-problems.
 
 Every recursive function must have:
-- **Base Case** – stops recursion
-- **Recursive Case** – function calls itself
+- **Base Case** → stops recursion
+- **Recursive Case** → function calls itself
 
 ---
 
-## 📚 Types of Recursion Covered
+## 📚 Recursion Types Covered
 
-### 1️⃣ Direct Recursion
-A function calls itself directly.
+1. Direct Recursion  
+2. Indirect Recursion  
+3. Tail Recursion  
+4. Non-Tail (Head) Recursion  
+5. Linear Recursion  
+6. Binary Recursion  
+7. Multiple (Tree) Recursion  
+8. Nested Recursion  
+9. Mutual Recursion  
+10. Tree Recursion  
 
-**Example:** Factorial  
-📌 Used in: factorial, sum, power
-
----
-
-### 2️⃣ Indirect Recursion
-A function calls another function which then calls the first function.
-
-📌 Used in: mutually dependent logic
-
----
-
-### 3️⃣ Tail Recursion
-Recursive call is the **last statement** in the function.
-
-📌 Faster & memory efficient  
-⚠️ C++ may optimize it
-
----
-
-### 4️⃣ Non-Tail (Head) Recursion
-Some work is done **after** the recursive call.
-
-📌 Output depends on return path
-
----
-
-### 5️⃣ Linear Recursion
-Only **one recursive call** per function call.
-
-📌 Time Complexity: **O(n)**
-
----
-
-### 6️⃣ Binary Recursion
-Function makes **two recursive calls**.
-
-📌 Example: Fibonacci  
-📌 Time Complexity: **O(2ⁿ)**
-
----
-
-### 7️⃣ Multiple (Tree) Recursion
-More than **two recursive calls**.
-
-📌 Used in: tree problems, DP
-
----
-
-### 8️⃣ Nested Recursion
-A recursive call inside another recursive call.
-
-📌 Rare but asked in exams
-
----
-
-### 9️⃣ Mutual Recursion
-Two or more functions call each other.
-
-📌 Used in: odd-even checks
-
----
-
-### 🔟 Tree Recursion
-Each call generates multiple child calls.
-
-📌 Used in: backtracking, tree traversal
+All concepts + programs are included in **one C++ file**.
 
 ---
 
 ## 📊 Recursion Types Summary
 
-| Type | Recursive Calls | Example |
-|-----|-----------------|---------|
+| Type | Calls | Example |
+|-----|------|--------|
 | Direct | 1 | Factorial |
 | Indirect | ≥2 | A → B → A |
 | Tail | 1 (last) | Optimized factorial |
@@ -113,20 +57,182 @@ Each call generates multiple child calls.
 ---
 
 ## 🎯 Interview Tips
-- Always identify the **base case**
-- Draw the **recursion tree**
-- Know **time & space complexity**
-- Convert recursion to iteration if needed
+- Always identify base case
+- Draw recursion tree
+- Understand stack memory
+- Analyze time complexity
 
 ---
+/*
+====================================================
+ 🔁 RECURSION – COMPLETE GUIDE WITH PROGRAMS (C++)
+====================================================
 
-## 🚀 Best Way to Learn Recursion
-1. Trace with small inputs
-2. Dry run on paper
-3. Understand call stack
-4. Practice problems daily
+Recursion is a technique where a function calls itself
+to solve a problem by breaking it into smaller sub-problems.
 
----
+Every recursive function must have:
+1️⃣ Base Case – stops recursion
+2️⃣ Recursive Case – function calls itself
 
-Happy Learning 🔥  
-Recursion becomes easy once you **visualize the calls** 🙂
+====================================================
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+/*--------------------------------------------------
+  1️⃣ DIRECT RECURSION
+  Function calls itself directly
+--------------------------------------------------*/
+int factorial(int n) {
+    if (n == 0) return 1;
+    return n * factorial(n - 1);
+}
+
+/*--------------------------------------------------
+  2️⃣ INDIRECT RECURSION
+  Functions call each other
+--------------------------------------------------*/
+void B(int n);
+
+void A(int n) {
+    if (n > 0) {
+        cout << n << " ";
+        B(n - 1);
+    }
+}
+
+void B(int n) {
+    if (n > 0) {
+        cout << n << " ";
+        A(n - 1);
+    }
+}
+
+/*--------------------------------------------------
+  3️⃣ TAIL RECURSION
+  Recursive call is the last statement
+--------------------------------------------------*/
+int factorialTail(int n, int result) {
+    if (n == 0) return result;
+    return factorialTail(n - 1, n * result);
+}
+
+/*--------------------------------------------------
+  4️⃣ NON-TAIL (HEAD) RECURSION
+  Work done after recursive call
+--------------------------------------------------*/
+void printNumbers(int n) {
+    if (n == 0) return;
+    printNumbers(n - 1);
+    cout << n << " ";
+}
+
+/*--------------------------------------------------
+  5️⃣ LINEAR RECURSION
+  One recursive call per function
+--------------------------------------------------*/
+int sum(int n) {
+    if (n == 0) return 0;
+    return n + sum(n - 1);
+}
+
+/*--------------------------------------------------
+  6️⃣ BINARY RECURSION
+  Two recursive calls
+--------------------------------------------------*/
+int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+/*--------------------------------------------------
+  7️⃣ MULTIPLE (TREE) RECURSION
+  More than two recursive calls
+--------------------------------------------------*/
+int ways(int n) {
+    if (n <= 1) return 1;
+    return ways(n - 1) + ways(n - 2) + ways(n - 3);
+}
+
+/*--------------------------------------------------
+  8️⃣ NESTED RECURSION
+  Recursive call inside another call
+--------------------------------------------------*/
+int fun(int n) {
+    if (n > 100)
+        return n - 10;
+    return fun(fun(n + 11));
+}
+
+/*--------------------------------------------------
+  9️⃣ MUTUAL RECURSION
+  Two functions call each other
+--------------------------------------------------*/
+bool isOdd(int n);
+
+bool isEven(int n) {
+    if (n == 0) return true;
+    return isOdd(n - 1);
+}
+
+bool isOdd(int n) {
+    if (n == 0) return false;
+    return isEven(n - 1);
+}
+
+/*--------------------------------------------------
+ 🔟 TREE RECURSION
+  Each call generates multiple child calls
+--------------------------------------------------*/
+void tree(int x) {
+    if (x > 0) {
+        tree(x - 1);
+        cout << x << " ";
+        tree(x - 1);
+    }
+}
+
+/*--------------------------------------------------
+  MAIN FUNCTION (DEMO)
+--------------------------------------------------*/
+int main() {
+
+    cout << "Direct Recursion (Factorial): "
+         << factorial(5) << endl;
+
+    cout << "Indirect Recursion: ";
+    A(5);
+    cout << endl;
+
+    cout << "Tail Recursion (Factorial): "
+         << factorialTail(5, 1) << endl;
+
+    cout << "Non-Tail Recursion: ";
+    printNumbers(5);
+    cout << endl;
+
+    cout << "Linear Recursion (Sum): "
+         << sum(5) << endl;
+
+    cout << "Binary Recursion (Fibonacci): "
+         << fibonacci(5) << endl;
+
+    cout << "Multiple Recursion (Ways): "
+         << ways(4) << endl;
+
+    cout << "Nested Recursion: "
+         << fun(95) << endl;
+
+    cout << "Mutual Recursion (isEven): "
+         << isEven(10) << endl;
+
+    cout << "Tree Recursion: ";
+    tree(3);
+    cout << endl;
+
+    return 0;
+}
+
+Happy Coding 🚀
