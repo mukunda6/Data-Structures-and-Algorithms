@@ -1,0 +1,70 @@
+// Problem: Subsets II (Subsets with Duplicates)
+// Technique: Backtracking
+//
+// Idea:
+// - Sort the array to group duplicates
+// - For each element, choose:
+//   1. Include it
+//   2. Exclude it and skip all duplicates
+//
+// Time Complexity: O(2^n)
+// Space Complexity: O(n) (recursion stack)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void getAllSubsets(vector<int>& nums,
+                       vector<int>& current,
+                       int index,
+                       vector<vector<int>>& allSubsets) {
+
+        // Base case
+        if (index == nums.size()) {
+            allSubsets.push_back(current);
+            return;
+        }
+
+        // Include current element
+        current.push_back(nums[index]);
+        getAllSubsets(nums, current, index + 1, allSubsets);
+        current.pop_back();
+
+        // Skip duplicates
+        int nextIndex = index + 1;
+        while (nextIndex < nums.size() && nums[nextIndex] == nums[index]) {
+            nextIndex++;
+        }
+
+        // Exclude current element and its duplicates
+        getAllSubsets(nums, current, nextIndex, allSubsets);
+    }
+
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        vector<vector<int>> allSubsets;
+        vector<int> current;
+
+        getAllSubsets(nums, current, 0, allSubsets);
+        return allSubsets;
+    }
+};
+
+/* ===================== MAIN FUNCTION ===================== */
+int main() {
+    Solution sol;
+    vector<int> nums = {1, 2, 2};
+
+    vector<vector<int>> result = sol.subsetsWithDup(nums);
+
+    cout << "Subsets with duplicates:\n";
+    for (auto &subset : result) {
+        cout << "[ ";
+        for (int x : subset) cout << x << " ";
+        cout << "]\n";
+    }
+
+    return 0;
+}
