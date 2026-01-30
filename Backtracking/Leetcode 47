@@ -1,0 +1,72 @@
+// Problem: Permutations II (LeetCode 47)
+// Technique: Backtracking + Hash Set
+//
+// Idea:
+// - Sort the array first
+// - Fix one position (idx)
+// - Try all unused numbers for this position
+// - Use a set to avoid duplicate swaps at the same recursion level
+//
+// Time Complexity: O(n!)
+// Space Complexity: O(n) (recursion stack + set)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void getPerms(vector<int>& nums, int idx, vector<vector<int>>& ans) {
+
+        // Base case: one permutation formed
+        if (idx == nums.size()) {
+            ans.push_back(nums);
+            return;
+        }
+
+        unordered_set<int> used;  // avoid duplicates at this level
+
+        for (int i = idx; i < nums.size(); i++) {
+
+            // Skip duplicate choices
+            if (used.count(nums[i])) continue;
+
+            used.insert(nums[i]);
+
+            // Choose
+            swap(nums[idx], nums[i]);
+
+            // Explore
+            getPerms(nums, idx + 1, ans);
+
+            // Backtrack
+            swap(nums[idx], nums[i]);
+        }
+    }
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> ans;
+
+        // Sorting helps grouping duplicates
+        sort(nums.begin(), nums.end());
+
+        getPerms(nums, 0, ans);
+        return ans;
+    }
+};
+
+/* ===================== MAIN FUNCTION ===================== */
+int main() {
+    Solution sol;
+    vector<int> nums = {1, 1, 2};
+
+    vector<vector<int>> result = sol.permuteUnique(nums);
+
+    cout << "Unique permutations:\n";
+    for (auto &perm : result) {
+        cout << "[ ";
+        for (int x : perm) cout << x << " ";
+        cout << "]\n";
+    }
+
+    return 0;
+}
