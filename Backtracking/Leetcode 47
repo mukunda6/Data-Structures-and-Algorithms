@@ -1,68 +1,114 @@
 // Problem: Permutations II (LeetCode 47)
-// Technique: Backtracking + Hash Set
+// Topic: Backtracking
 //
-// Idea:
-// - Sort the array first
-// - Fix one position (idx)
-// - Try all unused numbers for this position
-// - Use a set to avoid duplicate swaps at the same recursion level
+// This file contains TWO approaches:
 //
-// Time Complexity: O(n!)
-// Space Complexity: O(n) (recursion stack + set)
+// 1️⃣ Swap-based Backtracking (NO extra set)
+// 2️⃣ Swap-based Backtracking + Hash Set
+//
+// --------------------------------------------------
+// Time Complexity: O(n! * n)
+// Space Complexity: O(n) (recursion stack)
+// --------------------------------------------------
 
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
+/*==================================================
+  🔹 APPROACH 1: Swap-based (NO Set)
+==================================================*/
+class Solution_NoSet {
 public:
-    void getPerms(vector<int>& nums, int idx, vector<vector<int>>& ans) {
+    // Check if nums[curr] already appeared in [start, curr-1]
+    bool shouldSwap(vector<int>& nums, int start, int curr) {
+        for (int i = start; i < curr; i++) {
+            if (nums[i] == nums[curr])
+                return false;
+        }
+        return true;
+    }
 
-        // Base case: one permutation formed
+    void getPerms(vector<int>& nums, int idx, vector<vector<int>>& ans) {
         if (idx == nums.size()) {
             ans.push_back(nums);
             return;
         }
 
-        unordered_set<int> used;  // avoid duplicates at this level
-
         for (int i = idx; i < nums.size(); i++) {
+            if (!shouldSwap(nums, idx, i)) continue;
 
-            // Skip duplicate choices
-            if (used.count(nums[i])) continue;
-
-            used.insert(nums[i]);
-
-            // Choose
             swap(nums[idx], nums[i]);
-
-            // Explore
             getPerms(nums, idx + 1, ans);
-
-            // Backtrack
-            swap(nums[idx], nums[i]);
+            swap(nums[idx], nums[i]); // backtrack
         }
     }
 
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         vector<vector<int>> ans;
-
-        // Sorting helps grouping duplicates
         sort(nums.begin(), nums.end());
-
         getPerms(nums, 0, ans);
         return ans;
     }
 };
 
-/* ===================== MAIN FUNCTION ===================== */
+/*==================================================
+  🔹 APPROACH 2: Swap-based + Hash Set
+==================================================*/
+class Solution_WithSet {
+public:
+    void getPerms(vector<int>& nums, int idx, vector<vector<int>>& ans) {
+
+        if (idx == nums.size()) {
+            ans.push_back(nums);
+            return;
+        }
+
+        unordered_set<int> used;
+
+        for (int i = idx; i < nums.size(); i++) {
+
+            if (used.count(nums[i])) continue;
+            used.insert(nums[i]);
+
+            swap(nums[idx], nums[i]);
+            getPerms(nums, idx + 1, ans);
+            swap(nums[idx], nums[i]); // backtrack
+        }
+    }
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        getPerms(nums, 0, ans);
+        return ans;
+    }
+};
+
+/*==================================================
+  🔹 MAIN FUNCTION
+==================================================*/
 int main() {
-    Solution sol;
     vector<int> nums = {1, 1, 2};
 
-    vector<vector<int>> result = sol.permuteUnique(nums);
+    // ----- Approach 1 -----
+    Solution_NoSet sol1;
+    auto res1 = sol1.permuteUnique(nums);
 
-    cout << "Unique permutations:\n";
-    for (auto &perm : result) {
+    cout << "Approach 1 (No Set):\n";
+    for (auto &perm : res1) {
+        cout << "[ ";
+        for (int x : perm) cout << x << " ";
+        cout << "]\n";
+    }
+
+    cout << "\n";
+
+    // ----- Approach 2 -----
+    Solution_WithSet sol2;
+    auto res2 = sol2.permuteUnique(nums);
+
+    cout << "Approach 2 (With Set):\n";
+    for (auto &perm : res2) {
         cout << "[ ";
         for (int x : perm) cout << x << " ";
         cout << "]\n";
