@@ -1,0 +1,49 @@
+// Dynamic Programming: Frog Jump (DP-3)
+// Problem: Minimum energy to reach last stair
+// Approach: Recursion + Memoization (Top-Down DP)
+//
+// Time Complexity: O(N)
+// Space Complexity: O(N) + O(N) recursion stack
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int solve(int ind, vector<int>& height, vector<int>& dp) {
+        // Base case: first stair
+        if (ind == 0) return 0;
+
+        // If already computed
+        if (dp[ind] != -1) return dp[ind];
+
+        // Jump from previous stair
+        int jumpOne = solve(ind - 1, height, dp)
+                      + abs(height[ind] - height[ind - 1]);
+
+        // Jump from two stairs back
+        int jumpTwo = INT_MAX;
+        if (ind > 1) {
+            jumpTwo = solve(ind - 2, height, dp)
+                      + abs(height[ind] - height[ind - 2]);
+        }
+
+        // Store and return minimum energy
+        return dp[ind] = min(jumpOne, jumpTwo);
+    }
+
+    int frogJump(vector<int>& height) {
+        int n = height.size();
+        vector<int> dp(n, -1);
+        return solve(n - 1, height, dp);
+    }
+};
+
+int main() {
+    vector<int> height = {30, 10, 60, 10, 60, 50};
+
+    Solution sol;
+    cout << sol.frogJump(height) << endl; // Output: 40
+
+    return 0;
+}
