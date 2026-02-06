@@ -1,0 +1,57 @@
+// ============================================================
+// Problem: Minimum Bit Flips to Convert Number
+// Category: Bit Manipulation
+//
+// Idea:
+// - XOR start and goal → gives bits that differ
+// - Count number of set bits in XOR result
+// - That count = minimum flips needed
+//
+// Example:
+// start = 10 -> 1010
+// goal  =  7 -> 0111
+// XOR   =      1101 -> 3 bits set
+//
+// Time Complexity: O(1)  (fixed 32 bits)
+// Space Complexity: O(1)
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // Count differing bits using XOR + bit check
+    ///////////////////////////////////////////////////////////
+    int minBitsFlip(int start, int goal) {
+
+        int num = start ^ goal;  // Bits that differ
+        int count = 0;
+
+        // Count set bits
+        for (int i = 0; i < 32; i++) {
+            count += (num & 1);
+            num >>= 1;
+        }
+        return count;
+    }
+};
+
+/////////////////////////
+// Main Test Driver
+/////////////////////////
+int main() {
+
+    int start = 10;
+    int goal  = 7;
+
+    Solution sol;
+
+    int ans = sol.minBitsFlip(start, goal);
+
+    cout << "Minimum bit flips needed: " << ans << endl;
+
+    return 0;
+}
