@@ -1,0 +1,85 @@
+// ============================================================
+// Problem: Clear i-th Bit of a Number
+// Category: Bit Manipulation
+//
+// Approaches:
+// 1️⃣ Brute Force
+//     - Convert number to binary string
+//     - Modify bit
+//     - Convert back to integer
+//     Time: O(b)   Space: O(b)
+//
+// 2️⃣ Optimal Bitwise
+//     - Use AND with NOT mask
+//     - n & ~(1 << i)
+//     Time: O(1)   Space: O(1)
+//
+// Example:
+// n = 7  (111)
+// i = 1
+// Result = 5 (101)
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Brute Force — Binary string manipulation
+    ///////////////////////////////////////////////////////////
+    int clearBitBrute(int n, int i) {
+        string binary = "";
+        int temp = n;
+
+        // Convert to reversed binary (LSB first)
+        while (temp > 0) {
+            binary += (temp % 2 ? '1' : '0');
+            temp /= 2;
+        }
+
+        // Ensure string length covers index i
+        while (binary.size() <= i)
+            binary += '0';
+
+        // Clear bit
+        binary[i] = '0';
+
+        // Convert back to decimal
+        int result = 0;
+        for (int j = 0; j < binary.size(); j++) {
+            if (binary[j] == '1')
+                result += (1 << j);
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Optimal Bit Manipulation
+    ///////////////////////////////////////////////////////////
+    int clearBitOptimal(int n, int i) {
+        return n & ~(1 << i);
+    }
+};
+
+/////////////////////////
+// Main Test Driver
+/////////////////////////
+int main() {
+
+    Solution sol;
+
+    int num = 7;      // Binary: 111
+    int bitIndex = 1; // Clear bit
+
+    int bruteAns = sol.clearBitBrute(num, bitIndex);
+    int optAns   = sol.clearBitOptimal(num, bitIndex);
+
+    cout << "Original Number : " << num << endl;
+    cout << "Brute Force     : " << bruteAns << endl;
+    cout << "Optimal         : " << optAns << endl;
+
+    return 0;
+}
