@@ -1,0 +1,61 @@
+// ============================================================
+// Problem: Minimum Removals to Satisfy Condition
+// Technique: Sorting + Sliding Window / Two Pointers
+//
+// Idea:
+// - Sort array
+// - Find longest subarray where:
+//      nums[j] <= k * nums[i]
+// - Window expands with j
+// - Track maximum valid window length
+// - Answer = total elements - max_window
+//
+// Time Complexity: O(n log n)  (sorting)
+// Space Complexity: O(1)
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int minRemoval(vector<int>& nums, int k) {
+
+        int n = nums.size();
+        if (n <= 1) return 0;
+
+        sort(nums.begin(), nums.end());
+
+        int maxLen = 0;
+        int j = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            // Expand window
+            while (j < n &&
+                   (long long)nums[j] <= (long long)k * nums[i]) {
+                j++;
+            }
+
+            maxLen = max(maxLen, j - i);
+        }
+
+        return n - maxLen;
+    }
+};
+
+/////////////////////////
+// Main (Test Example)
+/////////////////////////
+int main() {
+
+    Solution sol;
+
+    vector<int> nums = {1, 3, 4, 9};
+    int k = 2;
+
+    cout << "Minimum removals = "
+         << sol.minRemoval(nums, k) << endl;
+
+    return 0;
+}
