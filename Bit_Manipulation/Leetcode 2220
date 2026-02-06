@@ -1,19 +1,5 @@
 // ============================================================
 // Problem: Minimum Bit Flips to Convert Number
-// Category: Bit Manipulation
-//
-// Idea:
-// - XOR start and goal → gives bits that differ
-// - Count number of set bits in XOR result
-// - That count = minimum flips needed
-//
-// Example:
-// start = 10 -> 1010
-// goal  =  7 -> 0111
-// XOR   =      1101 -> 3 bits set
-//
-// Time Complexity: O(1)  (fixed 32 bits)
-// Space Complexity: O(1)
 // ============================================================
 
 #include <bits/stdc++.h>
@@ -23,24 +9,52 @@ class Solution {
 public:
 
     ///////////////////////////////////////////////////////////
-    // Count differing bits using XOR + bit check
+    // 🔹 Approach 1 — Check each bit (basic loop)
     ///////////////////////////////////////////////////////////
-    int minBitsFlip(int start, int goal) {
-
-        int num = start ^ goal;  // Bits that differ
+    int method1_loop(int start, int goal) {
+        int num = start ^ goal;
         int count = 0;
 
-        // Count set bits
         for (int i = 0; i < 32; i++) {
             count += (num & 1);
             num >>= 1;
         }
         return count;
     }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 2 — Brian Kernighan’s Algorithm
+    // Removes lowest set bit each iteration
+    ///////////////////////////////////////////////////////////
+    int method2_kernighan(int start, int goal) {
+        int num = start ^ goal;
+        int count = 0;
+
+        while (num) {
+            num &= (num - 1); // remove last set bit
+            count++;
+        }
+        return count;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 3 — Built-in Popcount (Optimal practical)
+    ///////////////////////////////////////////////////////////
+    int method3_builtin(int start, int goal) {
+        return __builtin_popcount(start ^ goal);
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 4 — Using bitset
+    ///////////////////////////////////////////////////////////
+    int method4_bitset(int start, int goal) {
+        bitset<32> b(start ^ goal);
+        return b.count();
+    }
 };
 
 /////////////////////////
-// Main Test Driver
+// Main Driver
 /////////////////////////
 int main() {
 
@@ -49,9 +63,17 @@ int main() {
 
     Solution sol;
 
-    int ans = sol.minBitsFlip(start, goal);
+    cout << "Method 1 (Loop)      : "
+         << sol.method1_loop(start, goal) << endl;
 
-    cout << "Minimum bit flips needed: " << ans << endl;
+    cout << "Method 2 (Kernighan) : "
+         << sol.method2_kernighan(start, goal) << endl;
+
+    cout << "Method 3 (Builtin)   : "
+         << sol.method3_builtin(start, goal) << endl;
+
+    cout << "Method 4 (Bitset)    : "
+         << sol.method4_bitset(start, goal) << endl;
 
     return 0;
 }
