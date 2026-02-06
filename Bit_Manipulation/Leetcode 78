@@ -1,0 +1,108 @@
+// ============================================================
+// Problem: Generate Power Set (All Subsets)
+// Category: Bit Manipulation / Backtracking
+//
+// Approaches:
+// 1️⃣ Bitmask Method
+//     - Use binary representation of numbers
+//     - Each bit represents inclusion/exclusion
+//     Time: O(n * 2^n)
+//
+// 2️⃣ Recursive Backtracking
+//     - Include / Exclude choice
+//     Time: O(2^n)
+//
+// Space Complexity: O(2^n)
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 1 — Bitmask
+    ///////////////////////////////////////////////////////////
+    vector<vector<int>> powerSetBitmask(vector<int>& nums) {
+
+        int n = nums.size();
+        int total = 1 << n;
+
+        vector<vector<int>> ans;
+
+        for (int mask = 0; mask < total; mask++) {
+
+            vector<int> subset;
+
+            for (int i = 0; i < n; i++) {
+                if (mask & (1 << i))
+                    subset.push_back(nums[i]);
+            }
+
+            ans.push_back(subset);
+        }
+        return ans;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 2 — Recursive Backtracking
+    ///////////////////////////////////////////////////////////
+    void solve(int idx,
+               vector<int>& nums,
+               vector<int>& current,
+               vector<vector<int>>& ans) {
+
+        if (idx == nums.size()) {
+            ans.push_back(current);
+            return;
+        }
+
+        // Include
+        current.push_back(nums[idx]);
+        solve(idx + 1, nums, current, ans);
+
+        // Exclude
+        current.pop_back();
+        solve(idx + 1, nums, current, ans);
+    }
+
+    vector<vector<int>> powerSetRecursive(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> current;
+        solve(0, nums, current, ans);
+        return ans;
+    }
+};
+
+///////////////////////////////////////////////////////////////
+// Utility: Print Subsets
+///////////////////////////////////////////////////////////////
+void printSubsets(const vector<vector<int>>& subsets) {
+    for (auto &subset : subsets) {
+        cout << "[ ";
+        for (int x : subset)
+            cout << x << " ";
+        cout << "]\n";
+    }
+}
+
+///////////////////////////////////////////////////////////////
+// Main Test Driver
+///////////////////////////////////////////////////////////////
+int main() {
+
+    vector<int> nums = {5, 7, 8};
+
+    Solution sol;
+
+    cout << "Bitmask Approach:\n";
+    auto ans1 = sol.powerSetBitmask(nums);
+    printSubsets(ans1);
+
+    cout << "\nRecursive Approach:\n";
+    auto ans2 = sol.powerSetRecursive(nums);
+    printSubsets(ans2);
+
+    return 0;
+}
