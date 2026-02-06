@@ -1,0 +1,102 @@
+// ============================================================
+// Problem: Single Number
+// Category: Array / Bit Manipulation
+//
+// Given an array where every element appears twice except one,
+// find that single element.
+//
+// Approaches:
+// 1️⃣ Brute Force — Check frequency
+//     Time: O(n²)
+// 2️⃣ Sorting
+//     Time: O(n log n)
+// 3️⃣ Hash Map
+//     Time: O(n)   Space: O(n)
+// 4️⃣ XOR (Optimal)
+//     - a ^ a = 0
+//     - a ^ 0 = a
+//     Time: O(n)   Space: O(1)
+//
+// Example:
+// nums = [4,1,2,1,2]
+// Output = 4
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 1 — Brute Force
+    ///////////////////////////////////////////////////////////
+    int singleBrute(vector<int>& nums) {
+        for (int i = 0; i < nums.size(); i++) {
+            int count = 0;
+            for (int j = 0; j < nums.size(); j++) {
+                if (nums[i] == nums[j])
+                    count++;
+            }
+            if (count == 1)
+                return nums[i];
+        }
+        return -1;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 2 — Sorting
+    ///////////////////////////////////////////////////////////
+    int singleSorting(vector<int> nums) {
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < nums.size() - 1; i += 2) {
+            if (nums[i] != nums[i + 1])
+                return nums[i];
+        }
+        return nums.back();
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 3 — Hash Map
+    ///////////////////////////////////////////////////////////
+    int singleHash(vector<int>& nums) {
+        unordered_map<int,int> freq;
+
+        for (int x : nums)
+            freq[x]++;
+
+        for (auto &p : freq)
+            if (p.second == 1)
+                return p.first;
+
+        return -1;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Approach 4 — XOR (Optimal)
+    ///////////////////////////////////////////////////////////
+    int singleXOR(vector<int>& nums) {
+        int ans = 0;
+        for (int x : nums)
+            ans ^= x;
+        return ans;
+    }
+};
+
+///////////////////////////////////////////////////////////////
+// Main Test Driver
+///////////////////////////////////////////////////////////////
+int main() {
+
+    vector<int> nums = {4,1,2,1,2};
+
+    Solution sol;
+
+    cout << "Brute Force : " << sol.singleBrute(nums) << endl;
+    cout << "Sorting     : " << sol.singleSorting(nums) << endl;
+    cout << "Hash Map    : " << sol.singleHash(nums) << endl;
+    cout << "XOR Optimal : " << sol.singleXOR(nums) << endl;
+
+    return 0;
+}
