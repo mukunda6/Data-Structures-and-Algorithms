@@ -1,0 +1,43 @@
+// ============================================================
+// Problem: Set Rightmost Unset Bit
+// Category: Bit Manipulation
+//
+// Idea:
+// - Use property:
+//      n | (n + 1)
+// - This sets the rightmost 0 bit of n to 1
+//
+// Example:
+// n = 10 -> Binary: 1010
+// n+1 = 11 -> Binary: 1011
+// Result = n | (n+1) = 1011 (11)
+//
+// Time Complexity: O(1)
+// Space Complexity: O(1)
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+///////////////////////////////////////////////////////////////
+// Function to set the rightmost unset bit
+///////////////////////////////////////////////////////////////
+int setRightmostUnsetBit(int n) {
+    return n | (n + 1);
+}
+
+/////////////////////////
+// Main Test Driver
+/////////////////////////
+int main() {
+
+    int n = 10;  // Binary: 1010
+
+    int result = setRightmostUnsetBit(n);
+
+    cout << "Original Number: " << n << endl;
+    cout << "After Setting Rightmost Unset Bit: "
+         << result << endl;
+
+    return 0;
+}
