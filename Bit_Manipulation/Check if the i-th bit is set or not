@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    // 🔹 Approach 1 — String/Binary conversion (your method)
+    bool checkUsingString(int n, int i) {
+        string binary = "";
+        int temp = n;
+
+        while (temp > 0) {
+            binary += (temp % 2 == 0 ? '0' : '1');
+            temp /= 2;
+        }
+
+        if (i >= binary.size()) return false;
+        return binary[i] == '1';
+    }
+
+    // 🔹 Approach 2 — Left Shift (Bit Mask)
+    bool checkUsingLeftShift(int n, int i) {
+        return (n & (1 << i)) != 0;
+    }
+
+    // 🔹 Approach 3 — Right Shift
+    bool checkUsingRightShift(int n, int i) {
+        return ((n >> i) & 1) == 1;
+    }
+};
+
+int main() {
+    Solution sol;
+
+    int num = 5;      // Binary: 101
+    int bitIndex = 2; // Check 2nd bit
+
+    cout << "Using String Approach : "
+         << sol.checkUsingString(num, bitIndex) << endl;
+
+    cout << "Using Left Shift      : "
+         << sol.checkUsingLeftShift(num, bitIndex) << endl;
+
+    cout << "Using Right Shift     : "
+         << sol.checkUsingRightShift(num, bitIndex) << endl;
+
+    return 0;
+}
