@@ -1,0 +1,116 @@
+// ============================================================
+// Problem: Single Number II
+// Category: Bit Manipulation / Array
+//
+// Given an array where every element appears THREE times
+// except one element which appears once — find it.
+//
+// Approaches:
+// 1️⃣ Hash Map
+//     Time: O(n)  Space: O(n)
+//
+// 2️⃣ Sorting
+//     Time: O(n log n)  Space: O(1)
+//
+// 3️⃣ Bit Counting
+//     Count bits modulo 3
+//     Time: O(32*n)
+//
+// 4️⃣ State Machine (Optimal)
+//     Track bits appearing once/twice
+//     Time: O(n)  Space: O(1)
+//
+// Example:
+// nums = [2,2,3,2]
+// Output = 3
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // 🔵 Approach 1 — Hash Map
+    ///////////////////////////////////////////////////////////
+    int usingMap(vector<int> nums) {
+        unordered_map<int,int> mp;
+        for(int x : nums)
+            mp[x]++;
+
+        for(auto &p : mp)
+            if(p.second == 1)
+                return p.first;
+
+        return -1;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🟢 Approach 2 — Sorting
+    ///////////////////////////////////////////////////////////
+    int usingSort(vector<int> nums) {
+        sort(nums.begin(), nums.end());
+
+        for(int i = 1; i < nums.size(); i += 3) {
+            if(nums[i] != nums[i-1])
+                return nums[i-1];
+        }
+        return nums.back();
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🟡 Approach 3 — Bit Counting
+    ///////////////////////////////////////////////////////////
+    int usingBitCount(vector<int> nums) {
+        int ans = 0;
+
+        for(int b = 0; b < 32; b++) {
+            int cnt = 0;
+            for(int x : nums)
+                if(x & (1 << b))
+                    cnt++;
+
+            if(cnt % 3)
+                ans |= (1 << b);
+        }
+        return ans;
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔴 Approach 4 — State Machine (Best)
+    ///////////////////////////////////////////////////////////
+    int usingStateMachine(vector<int> nums) {
+        int ones = 0, twos = 0;
+
+        for(int x : nums) {
+            ones = (ones ^ x) & ~twos;
+            twos = (twos ^ x) & ~ones;
+        }
+        return ones;
+    }
+};
+
+///////////////////////////////////////////////////////////////
+// Main Test Driver
+///////////////////////////////////////////////////////////////
+int main() {
+
+    vector<int> nums = {2,2,3,2};
+
+    Solution sol;
+
+    cout << "Using Map          : "
+         << sol.usingMap(nums) << endl;
+
+    cout << "Using Sort         : "
+         << sol.usingSort(nums) << endl;
+
+    cout << "Using Bit Count    : "
+         << sol.usingBitCount(nums) << endl;
+
+    cout << "Using StateMachine : "
+         << sol.usingStateMachine(nums) << endl;
+
+    return 0;
+}
