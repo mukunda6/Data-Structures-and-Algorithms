@@ -1,0 +1,95 @@
+// ============================================================
+// Problem: Single Number III
+// LeetCode: 260
+// Category: Bit Manipulation / Array
+//
+// Given an integer array where exactly TWO elements appear
+// once and all others appear twice — return those two numbers.
+//
+// ------------------------------------------------------------
+// Approaches:
+// 1️⃣ XOR Bucket Partition (Optimal)
+//     Time: O(n)
+//     Space: O(1)
+//
+// 2️⃣ Hash Map
+//     Time: O(n)
+//     Space: O(n)
+//
+// Example:
+// nums = [1,2,1,3,2,5]
+// Output = [3,5]
+// ============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Method 1 — XOR (Optimal)
+    ///////////////////////////////////////////////////////////
+    vector<int> singleNumberXOR(vector<int>& nums){
+        long xr = 0;
+
+        // XOR of all numbers -> x ^ y
+        for(int x : nums)
+            xr ^= x;
+
+        // Get rightmost set bit
+        int rightmost = (xr & (xr - 1)) ^ xr;
+
+        int x1 = 0, x2 = 0;
+
+        // Partition numbers into two buckets
+        for(int x : nums){
+            if(x & rightmost)
+                x1 ^= x;
+            else
+                x2 ^= x;
+        }
+
+        if(x1 < x2) return {x1, x2};
+        return {x2, x1};
+    }
+
+    ///////////////////////////////////////////////////////////
+    // 🔹 Method 2 — Hash Map
+    ///////////////////////////////////////////////////////////
+    vector<int> singleNumberMap(vector<int>& nums){
+        unordered_map<int,int> freq;
+
+        for(int x : nums)
+            freq[x]++;
+
+        vector<int> res;
+
+        for(auto &p : freq)
+            if(p.second == 1)
+                res.push_back(p.first);
+
+        sort(res.begin(), res.end());
+        return res;
+    }
+};
+
+
+///////////////////////////////////////////////////////////////
+// Driver Code
+///////////////////////////////////////////////////////////////
+int main() {
+
+    vector<int> nums = {1,2,1,3,2,5};
+    Solution sol;
+
+    auto ans1 = sol.singleNumberXOR(nums);
+    cout << "XOR Method Result: "
+         << ans1[0] << " " << ans1[1] << endl;
+
+    auto ans2 = sol.singleNumberMap(nums);
+    cout << "Map Method Result: "
+         << ans2[0] << " " << ans2[1] << endl;
+
+    return 0;
+}
