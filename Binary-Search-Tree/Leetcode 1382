@@ -1,0 +1,168 @@
+// =============================================================
+// Problem: Balance a Binary Search Tree
+// LeetCode: 1382
+// Category: Binary Tree / BST
+//
+// Given a BST, return a balanced BST with same node values.
+//
+// -------------------------------------------------------------
+// Approaches Included:
+//
+// ⭐ Approach 1
+// Inorder traversal -> Sorted array -> Build balanced BST
+// Time: O(n)
+// Space: O(n)
+//
+// ⭐⭐ Approach 2
+// Store node pointers -> Relink (no new allocation)
+// Time: O(n)
+// Space: O(n)
+//
+// ⭐⭐⭐ Approach 3 (Advanced)
+// Day–Stout–Warren Algorithm (DSW)
+// In-place rotations
+// Time: O(n)
+// Space: O(1)
+// =============================================================
+
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Tree Definition */
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+class Solution {
+public:
+
+    /////////////////////////////////////////////////////////////
+    // APPROACH 1 — Inorder Values → Rebuild
+    /////////////////////////////////////////////////////////////
+
+    void inorder1(TreeNode* root, vector<int>& v){
+        if(!root) return;
+        inorder1(root->left, v);
+        v.push_back(root->val);
+        inorder1(root->right, v);
+    }
+
+    TreeNode* build1(vector<int>& v, int l, int r){
+        if(l > r) return NULL;
+
+        int mid = (l+r)/2;
+        TreeNode* root = new TreeNode(v[mid]);
+
+        root->left = build1(v, l, mid-1);
+        root->right = build1(v, mid+1, r);
+
+        return root;
+    }
+
+    TreeNode* balanceBST_Approach1(TreeNode* root) {
+        vector<int> v;
+        inorder1(root, v);
+        return build1(v, 0, v.size()-1);
+    }
+
+    /////////////////////////////////////////////////////////////
+    // APPROACH 2 — Relink Existing Nodes
+    /////////////////////////////////////////////////////////////
+
+    void inorder2(TreeNode* root, vector<TreeNode*>& v){
+        if(!root) return;
+        inorder2(root->left, v);
+        v.push_back(root);
+        inorder2(root->right, v);
+    }
+
+    TreeNode* build2(vector<TreeNode*>& v, int l, int r){
+        if(l > r) return NULL;
+
+        int mid = (l+r)/2;
+        TreeNode* root = v[mid];
+
+        root->left = build2(v, l, mid-1);
+        root->right = build2(v, mid+1, r);
+
+        return root;
+    }
+
+    TreeNode* balanceBST_Approach2(TreeNode* root) {
+        vector<TreeNode*> v;
+        inorder2(root, v);
+        return build2(v, 0, v.size()-1);
+    }
+
+    /////////////////////////////////////////////////////////////
+    // APPROACH 3 — DSW In-Place Balancing
+    /////////////////////////////////////////////////////////////
+
+    void rotateRight(TreeNode* grand, TreeNode* parent, TreeNode* child){
+        parent->left = child->right;
+        child->right = parent;
+        grand->right = child;
+    }
+
+    void rotateLeft(TreeNode* grand, TreeNode* parent, TreeNode* child){
+        parent->right = child->left;
+        child->left = parent;
+        grand->right = child;
+    }
+
+    int makeVine(TreeNode* dummy){
+        TreeNode* tail = dummy;
+        TreeNode* rest = tail->right;
+        int size = 0;
+
+        while(rest){
+            if(rest->left){
+                TreeNode* child = rest->left;
+                rotateRight(tail, rest, child);
+                rest = child;
+            } else {
+                tail = rest;
+                rest = rest->right;
+                size++;
+            }
+        }
+        return size;
+    }
+
+    void compress(TreeNode* dummy, int count){
+        TreeNode* scanner = dummy;
+        for(int i=0;i<count;i++){
+            TreeNode* child = scanner->right;
+            rotateLeft(scanner, child, child->right);
+            scanner = scanner->right;
+        }
+    }
+
+    TreeNode* balanceBST_Approach3(TreeNode* root){
+        TreeNode dummy(0);
+        dummy.right = root;
+
+        int n = makeVine(&dummy);
+        int m = pow(2, floor(log2(n+1))) - 1;
+
+        compress(&dummy, n-m);
+
+        while(m>1){
+            m/=2;
+            compress(&dummy, m);
+        }
+
+        return dummy.right;
+    }
+
+    /////////////////////////////////////////////////////////////
+    // Default chooser
+    /////////////////////////////////////////////////////////////
+    TreeNode* balanceBST(TreeNode* root) {
+        return balanceBST_Approach1(root);
+    }
+};
