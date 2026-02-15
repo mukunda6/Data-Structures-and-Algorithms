@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    // =====================================================
+    // 🔥 Approach 1: Manual Binary Addition (BEST)
+    // =====================================================
+    string addBinary_manual(string a, string b) {
+        int i = a.size() - 1;
+        int j = b.size() - 1;
+        string ans = "";
+        int carry = 0;
+
+        while (i >= 0 || j >= 0 || carry) {
+            int sum = carry;
+
+            if (i >= 0) sum += a[i--] - '0';
+            if (j >= 0) sum += b[j--] - '0';
+
+            ans.push_back((sum % 2) + '0');
+            carry = sum / 2;
+        }
+
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+
+    // =====================================================
+    // ⚠️ Approach 2: Convert to decimal (SMALL INPUT ONLY)
+    // =====================================================
+    string addBinary_decimal(string a, string b) {
+        long long x = stoll(a, nullptr, 2);
+        long long y = stoll(b, nullptr, 2);
+        long long sum = x + y;
+
+        string res = bitset<64>(sum).to_string();
+        return res.substr(res.find('1'));
+    }
+
+    // =====================================================
+    // 🎯 Approach 3: Using bitset (limited size)
+    // =====================================================
+    string addBinary_bitset(string a, string b) {
+        bitset<64> x(a);
+        bitset<64> y(b);
+        bitset<64> sum = x.to_ullong() + y.to_ullong();
+
+        string res = sum.to_string();
+        return res.substr(res.find('1'));
+    }
+
+    // =====================================================
+    // 😎 Approach 4: Front insert (no reverse)
+    // =====================================================
+    string addBinary_frontInsert(string a, string b) {
+        int i = a.size() - 1;
+        int j = b.size() - 1;
+        string ans = "";
+        int carry = 0;
+
+        while (i >= 0 || j >= 0 || carry) {
+            int sum = carry;
+
+            if (i >= 0) sum += a[i--] - '0';
+            if (j >= 0) sum += b[j--] - '0';
+
+            ans = char((sum % 2) + '0') + ans;
+            carry = sum / 2;
+        }
+
+        return ans;
+    }
+};
+
+// ================= DRIVER =================
+int main() {
+    Solution sol;
+
+    string a = "1011";
+    string b = "110";
+
+    cout << "Manual: "
+         << sol.addBinary_manual(a, b) << endl;
+
+    cout << "Decimal: "
+         << sol.addBinary_decimal(a, b) << endl;
+
+    cout << "Bitset: "
+         << sol.addBinary_bitset(a, b) << endl;
+
+    cout << "Front Insert: "
+         << sol.addBinary_frontInsert(a, b) << endl;
+
+    return 0;
+}
