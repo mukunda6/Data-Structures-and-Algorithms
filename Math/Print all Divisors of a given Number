@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* =====================================================
+   🔴 Approach 1: Brute Force
+   Time: O(N)
+===================================================== */
+vector<int> divisorsBrute(int n) {
+    vector<int> res;
+
+    for (int i = 1; i <= n; i++) {
+        if (n % i == 0)
+            res.push_back(i);
+    }
+    return res;
+}
+
+/* =====================================================
+   🟡 Approach 2: √N Optimized (unsorted)
+===================================================== */
+vector<int> divisorsSqrt(int n) {
+    vector<int> res;
+
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            res.push_back(i);
+
+            if (i != n / i)
+                res.push_back(n / i);
+        }
+    }
+    return res;
+}
+
+/* =====================================================
+   🟢 Approach 3: √N Sorted (BEST)
+===================================================== */
+vector<int> divisorsSorted(int n) {
+    vector<int> small, large;
+
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            small.push_back(i);
+
+            if (i != n / i)
+                large.push_back(n / i);
+        }
+    }
+
+    reverse(large.begin(), large.end());
+    small.insert(small.end(), large.begin(), large.end());
+
+    return small;
+}
+
+/* =====================================================
+   🔵 Approach 4: Direct Print (Topper Style)
+===================================================== */
+void printDivisorsDirect(int n) {
+    vector<int> large;
+
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            cout << i << " ";
+
+            if (i != n / i)
+                large.push_back(n / i);
+        }
+    }
+
+    for (int i = large.size() - 1; i >= 0; i--)
+        cout << large[i] << " ";
+
+    cout << "\n";
+}
+
+/* ---------- Utility ---------- */
+void printVector(const vector<int>& v) {
+    for (int x : v) cout << x << " ";
+    cout << "\n";
+}
+
+/* =================== MAIN =================== */
+int main() {
+    int n;
+    cout << "Enter number: ";
+    cin >> n;
+
+    cout << "\n🔴 Brute Force:\n";
+    printVector(divisorsBrute(n));
+
+    cout << "\n🟡 √N Optimized (unsorted):\n";
+    printVector(divisorsSqrt(n));
+
+    cout << "\n🟢 √N Sorted (Best):\n";
+    printVector(divisorsSorted(n));
+
+    cout << "\n🔵 Direct Print (Topper Style):\n";
+    printDivisorsDirect(n);
+
+    return 0;
+}
