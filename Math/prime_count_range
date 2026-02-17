@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* =====================================================
+   🔴 Helper: check prime in O(√N)
+===================================================== */
+bool isPrimeSimple(int n) {
+    if (n < 2) return false;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0) return false;
+    return true;
+}
+
+/* =====================================================
+   🔴 Approach 1: Brute Force
+===================================================== */
+vector<int> bruteForce(vector<vector<int>>& queries) {
+    vector<int> ans;
+
+    for (auto &q : queries) {
+        int L = q[0], R = q[1];
+        int count = 0;
+
+        for (int num = L; num <= R; num++) {
+            bool prime = true;
+            if (num < 2) prime = false;
+            else {
+                for (int i = 2; i < num; i++) {
+                    if (num % i == 0) {
+                        prime = false;
+                        break;
+                    }
+                }
+            }
+            if (prime) count++;
+        }
+        ans.push_back(count);
+    }
+    return ans;
+}
+
+/* =====================================================
+   🟡 Approach 2: Using √N prime check
+===================================================== */
+vector<int> sqrtMethod(vector<vector<int>>& queries) {
+    vector<int> ans;
+
+    for (auto &q : queries) {
+        int L = q[0], R = q[1];
+        int count = 0;
+
+        for (int num = L; num <= R; num++) {
+            if (isPrimeSimple(num)) count++;
+        }
+        ans.push_back(count);
+    }
+    return ans;
+}
+
+/* =====================================================
+   🟢 Approach 3: Sieve + Prefix (BEST)
+===================================================== */
+vector<int> sieveMethod(vector<vector<int>>& queries) {
+    if (queries.empty()) return {};
+
+    int maxVal = 0;
+    for (auto &q : queries)
+        maxVal = max(maxVal, q[1]);
+
+    vector<bool> isPrime(maxVal + 1, true);
+    isPrime[0] = isPrime[1] = false;
+
+    for (int p = 2; p * p <= maxVal; p++) {
+        if (isPrime[p]) {
+            for (int i = p * p; i <= maxVal; i += p)
+                isPrime[i] = false;
+        }
+    }
+
+    vector<int> prefix(maxVal + 1, 0);
+    for (int i = 1; i <= maxVal; i++) {
+        prefix[i] = prefix[i - 1];
+        if (isPrime[i]) prefix[i]++;
+    }
+
+    vector<int> ans;
+    for (auto &q : queries) {
+        int L = q[0], R = q[1];
+        if (L == 0) ans.push_back(prefix[R]);
+        else ans.push_back(prefix[R] - prefix[L - 1]);
+    }
+
+    return ans;
+}
+
+/* ---------- Utility ---------- */
+void printAns(const vector<int>& v) {
+    for (int x : v) cout << x << " ";
+    cout << "\n";
+}
+
+/* =================== MAIN =================== */
+int main() {
+
+    vector<vector<int>> queries = {
+        {1, 10},
+        {10, 20},
+        {1, 100}
+    };
+
+    cout << "🔴 Brute Force:\n";
+    printAns(bruteForce(queries));
+
+    cout << "\n🟡 √N Method:\n";
+    printAns(sqrtMethod(queries));
+
+    cout << "\n🟢 Sieve + Prefix (Best):\n";
+    printAns(sieveMethod(queries));
+
+    return 0;
+}
