@@ -1,0 +1,148 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class PrimeFactors {
+public:
+
+    // -------------------------------------------------
+    // 🔹 Approach 1: Brute Force
+    // Time: O(n)
+    // -------------------------------------------------
+    void brute(int n) {
+        cout << "Prime factors: ";
+        for (int i = 2; i <= n; i++) {
+            while (n % i == 0) {
+                cout << i << " ";
+                n /= i;
+            }
+        }
+        cout << "\n";
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 2: Trial division till sqrt(n)
+    // Time: O(√n)
+    // -------------------------------------------------
+    void sqrt_method(int n) {
+        cout << "Prime factors: ";
+
+        for (int i = 2; i * i <= n; i++) {
+            while (n % i == 0) {
+                cout << i << " ";
+                n /= i;
+            }
+        }
+
+        if (n > 1) cout << n;
+        cout << "\n";
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 3: Optimized
+    // -------------------------------------------------
+    void optimized(int n) {
+        cout << "Prime factors: ";
+
+        while (n % 2 == 0) {
+            cout << 2 << " ";
+            n /= 2;
+        }
+
+        for (int i = 3; i * i <= n; i += 2) {
+            while (n % i == 0) {
+                cout << i << " ";
+                n /= i;
+            }
+        }
+
+        if (n > 1) cout << n;
+        cout << "\n";
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 4: Sieve based
+    // -------------------------------------------------
+    vector<int> primes;
+
+    void buildSieve(int limit) {
+        vector<bool> isPrime(limit + 1, true);
+        isPrime[0] = isPrime[1] = false;
+
+        for (int i = 2; i * i <= limit; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j <= limit; j += i)
+                    isPrime[j] = false;
+            }
+        }
+
+        for (int i = 2; i <= limit; i++)
+            if (isPrime[i]) primes.push_back(i);
+    }
+
+    void sieve_factor(int n) {
+        cout << "Prime factors: ";
+
+        for (int p : primes) {
+            if (1LL * p * p > n) break;
+
+            while (n % p == 0) {
+                cout << p << " ";
+                n /= p;
+            }
+        }
+
+        if (n > 1) cout << n;
+        cout << "\n";
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 5: Unique prime factors
+    // -------------------------------------------------
+    void uniqueFactors(int n) {
+        cout << "Unique prime factors: ";
+
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
+                cout << i << " ";
+                while (n % i == 0) n /= i;
+            }
+        }
+
+        if (n > 1) cout << n;
+        cout << "\n";
+    }
+};
+
+// -------------------------------------------------
+// 🔹 Driver
+// -------------------------------------------------
+int main() {
+    PrimeFactors pf;
+
+    int n, choice;
+    cout << "Enter number: ";
+    cin >> n;
+
+    cout << "\nChoose Approach:\n";
+    cout << "1. Brute Force\n";
+    cout << "2. sqrt(n) Method\n";
+    cout << "3. Optimized (recommended)\n";
+    cout << "4. Sieve Based\n";
+    cout << "5. Unique Prime Factors\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1: pf.brute(n); break;
+        case 2: pf.sqrt_method(n); break;
+        case 3: pf.optimized(n); break;
+        case 4:
+            pf.buildSieve(sqrt(n) + 1);
+            pf.sieve_factor(n);
+            break;
+        case 5: pf.uniqueFactors(n); break;
+        default: cout << "Invalid choice\n";
+    }
+
+    return 0;
+}
