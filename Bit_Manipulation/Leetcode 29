@@ -1,0 +1,150 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    // -------------------------------------------------
+    // 🔹 Approach 1: Brute Force (Repeated subtraction)
+    // Time: O(n)
+    // -------------------------------------------------
+    int divide_bruteforce(int dividend, int divisor) {
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;
+
+        long long n = llabs((long long)dividend);
+        long long d = llabs((long long)divisor);
+
+        long long count = 0;
+        while (n >= d) {
+            n -= d;
+            count++;
+        }
+
+        bool positive = ((dividend >= 0) == (divisor >= 0));
+        return positive ? count : -count;
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 2: Bit Shifting (INTERVIEW FAVORITE)
+    // Time: O(log n)
+    // -------------------------------------------------
+    int divide_shift(int dividend, int divisor) {
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;
+
+        bool positive = ((dividend >= 0) == (divisor >= 0));
+
+        long long n = llabs((long long)dividend);
+        long long d = llabs((long long)divisor);
+
+        long long ans = 0;
+
+        while (n >= d) {
+            int shift = 0;
+            while (n >= (d << (shift + 1))) {
+                shift++;
+            }
+            ans += (1LL << shift);
+            n -= (d << shift);
+        }
+
+        if (ans > INT_MAX) return positive ? INT_MAX : INT_MIN;
+        return positive ? ans : -ans;
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 3: Binary Search
+    // Time: O(log n)
+    // -------------------------------------------------
+    int divide_binary(int dividend, int divisor) {
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;
+
+        bool positive = ((dividend >= 0) == (divisor >= 0));
+
+        long long n = llabs((long long)dividend);
+        long long d = llabs((long long)divisor);
+
+        long long left = 0, right = n, ans = 0;
+
+        while (left <= right) {
+            long long mid = left + (right - left) / 2;
+
+            if (mid * d <= n) {
+                ans = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        if (ans > INT_MAX) return positive ? INT_MAX : INT_MIN;
+        return positive ? ans : -ans;
+    }
+
+    // -------------------------------------------------
+    // 🔹 Approach 4: Optimized Bitwise (FASTEST)
+    // Time: O(32)
+    // -------------------------------------------------
+    int divide_bitwise(int dividend, int divisor) {
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;
+
+        bool positive = ((dividend >= 0) == (divisor >= 0));
+
+        long long n = llabs((long long)dividend);
+        long long d = llabs((long long)divisor);
+
+        long long ans = 0;
+
+        for (int i = 31; i >= 0; i--) {
+            if ((d << i) <= n) {
+                n -= (d << i);
+                ans += (1LL << i);
+            }
+        }
+
+        if (ans > INT_MAX) return positive ? INT_MAX : INT_MIN;
+        return positive ? ans : -ans;
+    }
+};
+
+// -------------------------------------------------
+// 🔹 Driver Code
+// -------------------------------------------------
+int main() {
+    Solution sol;
+
+    int dividend, divisor, choice;
+
+    cout << "Enter dividend and divisor: ";
+    cin >> dividend >> divisor;
+
+    cout << "\nChoose Approach:\n";
+    cout << "1. Brute Force\n";
+    cout << "2. Bit Shift (Recommended)\n";
+    cout << "3. Binary Search\n";
+    cout << "4. Optimized Bitwise\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    int result = 0;
+
+    switch (choice) {
+        case 1:
+            result = sol.divide_bruteforce(dividend, divisor);
+            break;
+        case 2:
+            result = sol.divide_shift(dividend, divisor);
+            break;
+        case 3:
+            result = sol.divide_binary(dividend, divisor);
+            break;
+        case 4:
+            result = sol.divide_bitwise(dividend, divisor);
+            break;
+        default:
+            cout << "Invalid choice\n";
+            return 0;
+    }
+
+    cout << "Quotient = " << result << endl;
+    return 0;
+}
