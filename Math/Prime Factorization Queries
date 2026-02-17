@@ -1,0 +1,155 @@
+// Problem: Prime Factorization Queries
+// Platform: DSA / Competitive Programming
+//
+// Approaches:
+// 1. Brute Force — O(N)
+// 2. sqrt Optimization — O(√N)
+// 3. Smallest Prime Factor (SPF) — O(log N) ⭐ BEST
+//
+// Time Complexity:
+// Brute Force: O(N)
+// Sqrt Method: O(√N)
+// SPF Build: O(N log log N)
+// SPF Query: O(log N)
+//
+// Space Complexity:
+// SPF: O(N)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+private:
+    const int MAXN = 100000;
+    vector<int> spf;
+
+public:
+    //////////////////////////////////////////////////////
+    // 🔧 Constructor — build SPF once
+    //////////////////////////////////////////////////////
+    Solution() {
+        spf.resize(MAXN + 1);
+        buildSPF();
+    }
+
+    //////////////////////////////////////////////////////
+    // 🔴 Approach 1: Brute Force — O(N)
+    //////////////////////////////////////////////////////
+    vector<int> bruteForce(int n) {
+        vector<int> factors;
+
+        for (int i = 2; i <= n; i++) {
+            while (n % i == 0) {
+                factors.push_back(i);
+                n /= i;
+            }
+        }
+        return factors;
+    }
+
+    //////////////////////////////////////////////////////
+    // 🟡 Approach 2: sqrt optimization — O(√N)
+    //////////////////////////////////////////////////////
+    vector<int> sqrtMethod(int n) {
+        vector<int> factors;
+
+        for (int i = 2; i * i <= n; i++) {
+            while (n % i == 0) {
+                factors.push_back(i);
+                n /= i;
+            }
+        }
+
+        if (n > 1) factors.push_back(n);
+        return factors;
+    }
+
+    //////////////////////////////////////////////////////
+    // 🟢 Build Smallest Prime Factor (SPF)
+    // Time: O(N log log N)
+    //////////////////////////////////////////////////////
+    void buildSPF() {
+        for (int i = 1; i <= MAXN; i++)
+            spf[i] = i;
+
+        for (int i = 2; i * i <= MAXN; i++) {
+            if (spf[i] == i) {
+                for (int j = i * i; j <= MAXN; j += i) {
+                    if (spf[j] == j)
+                        spf[j] = i;
+                }
+            }
+        }
+    }
+
+    //////////////////////////////////////////////////////
+    // 🟢 Approach 3: SPF factorization — O(log N)
+    //////////////////////////////////////////////////////
+    vector<int> spfMethod(int n) {
+        vector<int> factors;
+
+        while (n != 1) {
+            factors.push_back(spf[n]);
+            n /= spf[n];
+        }
+        return factors;
+    }
+
+    //////////////////////////////////////////////////////
+    // 🔹 Utility: Print results nicely
+    //////////////////////////////////////////////////////
+    void printResult(int num,
+                     vector<int>& a,
+                     vector<int>& b,
+                     vector<int>& c) {
+
+        cout << "\nNumber: " << num << "\n";
+
+        cout << "Brute Force : ";
+        for (int x : a) cout << x << " ";
+
+        cout << "\nSqrt Method : ";
+        for (int x : b) cout << x << " ";
+
+        cout << "\nSPF Method  : ";
+        for (int x : c) cout << x << " ";
+
+        cout << "\n------------------------\n";
+    }
+
+    //////////////////////////////////////////////////////
+    // 🔹 Process multiple queries
+    //////////////////////////////////////////////////////
+    void solveQueries(vector<int>& queries) {
+        for (int num : queries) {
+
+            vector<int> bf = bruteForce(num);
+            vector<int> sq = sqrtMethod(num);
+            vector<int> sp = spfMethod(num);
+
+            printResult(num, bf, sq, sp);
+        }
+    }
+};
+
+/////////////////////////////////////////////////////////////
+// 🧠 MAIN — Input based driver
+/////////////////////////////////////////////////////////////
+int main() {
+    Solution sol;
+
+    int q;
+    cout << "Enter number of queries: ";
+    cin >> q;
+
+    vector<int> queries(q);
+
+    cout << "Enter numbers:\n";
+    for (int i = 0; i < q; i++) {
+        cin >> queries[i];
+    }
+
+    sol.solveQueries(queries);
+
+    return 0;
+}
