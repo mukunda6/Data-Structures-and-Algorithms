@@ -1,0 +1,156 @@
+// Problem: Binary Watch
+// Platform: LeetCode 401
+//
+// Approaches:
+// 1. Built-in Popcount (BEST)
+// 2. Manual Bit Count
+// 3. Backtracking
+//
+// Time Complexity:
+// Built-in: O(720)
+// Manual: O(720)
+// Backtracking: O(2^10)
+//
+// Space Complexity:
+// Built-in: O(1)
+// Manual: O(1)
+// Backtracking: O(10)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    //////////////////////////////////////
+    // 🔹 Helper — Manual bit count
+    //////////////////////////////////////
+    int countBits(int n) {
+        int cnt = 0;
+        while (n) {
+            cnt += (n & 1);
+            n >>= 1;
+        }
+        return cnt;
+    }
+
+    //////////////////////////////////////
+    // 1️⃣ Built-in Popcount (BEST)
+    //////////////////////////////////////
+    vector<string> binaryWatchBuiltin(int turnedOn) {
+        vector<string> ans;
+
+        for (int hour = 0; hour < 12; hour++) {
+            for (int minute = 0; minute < 60; minute++) {
+
+                if (__builtin_popcount(hour) +
+                    __builtin_popcount(minute) == turnedOn) {
+
+                    string time = to_string(hour) + ":";
+
+                    if (minute < 10) time += "0";
+                    time += to_string(minute);
+
+                    ans.push_back(time);
+                }
+            }
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 2️⃣ Manual Bit Count
+    //////////////////////////////////////
+    vector<string> binaryWatchManual(int turnedOn) {
+        vector<string> ans;
+
+        for (int hour = 0; hour < 12; hour++) {
+            for (int minute = 0; minute < 60; minute++) {
+
+                if (countBits(hour) + countBits(minute) == turnedOn) {
+
+                    string time = to_string(hour) + ":";
+
+                    if (minute < 10) time += "0";
+                    time += to_string(minute);
+
+                    ans.push_back(time);
+                }
+            }
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////
+    // 3️⃣ Backtracking Approach
+    //////////////////////////////////////
+    void solve(int idx, int ledsOn, int turnedOn,
+               int hour, int minute,
+               vector<int>& hourLED,
+               vector<int>& minLED,
+               vector<string>& ans) {
+
+        if (ledsOn > turnedOn) return;
+
+        if (idx == 10) {
+            if (ledsOn == turnedOn && hour < 12 && minute < 60) {
+                string time = to_string(hour) + ":";
+                if (minute < 10) time += "0";
+                time += to_string(minute);
+                ans.push_back(time);
+            }
+            return;
+        }
+
+        // ❌ Skip LED
+        solve(idx + 1, ledsOn, turnedOn,
+              hour, minute, hourLED, minLED, ans);
+
+        // ✅ Turn ON LED
+        if (idx < 4) {
+            solve(idx + 1, ledsOn + 1, turnedOn,
+                  hour + hourLED[idx], minute,
+                  hourLED, minLED, ans);
+        } else {
+            solve(idx + 1, ledsOn + 1, turnedOn,
+                  hour, minute + minLED[idx - 4],
+                  hourLED, minLED, ans);
+        }
+    }
+
+    vector<string> binaryWatchBacktracking(int turnedOn) {
+        vector<string> ans;
+
+        vector<int> hourLED = {8, 4, 2, 1};
+        vector<int> minLED  = {32, 16, 8, 4, 2, 1};
+
+        solve(0, 0, turnedOn, 0, 0, hourLED, minLED, ans);
+        return ans;
+    }
+};
+
+///////////////////////////////////////////////////////////////
+// 🔥 Driver Code (same style as your repo)
+///////////////////////////////////////////////////////////////
+int main() {
+    Solution obj;
+
+    int turnedOn = 1;
+
+    cout << "Built-in Method    : ";
+    auto a1 = obj.binaryWatchBuiltin(turnedOn);
+    for (auto &s : a1) cout << s << " ";
+    cout << endl;
+
+    cout << "Manual Bit Count   : ";
+    auto a2 = obj.binaryWatchManual(turnedOn);
+    for (auto &s : a2) cout << s << " ";
+    cout << endl;
+
+    cout << "Backtracking Method: ";
+    auto a3 = obj.binaryWatchBacktracking(turnedOn);
+    for (auto &s : a3) cout << s << " ";
+    cout << endl;
+
+    return 0;
+}
