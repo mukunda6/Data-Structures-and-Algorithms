@@ -146,3 +146,98 @@ int main() {
 
     return 0;
 }
+#include <bits/stdc++.h>
+using namespace std;
+
+/* ---------- Helper: check prime ---------- */
+bool isPrime(int x) {
+    if (x < 2) return false;
+    for (int i = 2; i * i <= x; i++) {
+        if (x % i == 0) return false;
+    }
+    return true;
+}
+
+/* =====================================================
+   🔴 Approach 1: Brute Force
+   Time: O(N√N)
+===================================================== */
+vector<int> primeFactorsBrute(int n) {
+    vector<int> res;
+
+    for (int i = 2; i <= n; i++) {
+        while (n % i == 0) {
+            if (isPrime(i))
+                res.push_back(i);
+            n /= i;
+        }
+    }
+    return res;
+}
+
+/* =====================================================
+   🟡 Approach 2: Optimized √N
+   Time: O(√N)
+===================================================== */
+vector<int> primeFactorsSqrt(int n) {
+    vector<int> res;
+
+    for (int i = 2; i * i <= n; i++) {
+        while (n % i == 0) {
+            res.push_back(i);
+            n /= i;
+        }
+    }
+
+    if (n > 1) res.push_back(n);
+    return res;
+}
+
+/* =====================================================
+   🟢 Approach 3: Most Optimal (skip evens)
+   Time: O(√N) but fastest
+===================================================== */
+vector<int> primeFactorsBest(int n) {
+    vector<int> res;
+
+    // remove factor 2
+    while (n % 2 == 0) {
+        res.push_back(2);
+        n /= 2;
+    }
+
+    // check only odd numbers
+    for (int i = 3; i * i <= n; i += 2) {
+        while (n % i == 0) {
+            res.push_back(i);
+            n /= i;
+        }
+    }
+
+    if (n > 1) res.push_back(n);
+    return res;
+}
+
+/* ---------- Utility to print vector ---------- */
+void printVector(const vector<int>& v) {
+    for (int x : v) cout << x << " ";
+    cout << "\n";
+}
+
+/* =================== MAIN =================== */
+int main() {
+    int n;
+    cout << "Enter number: ";
+    cin >> n;
+
+    cout << "\n🔴 Brute Force Factors:\n";
+    printVector(primeFactorsBrute(n));
+
+    cout << "\n🟡 Optimized √N Factors:\n";
+    printVector(primeFactorsSqrt(n));
+
+    cout << "\n🟢 Most Optimal Factors:\n";
+    printVector(primeFactorsBest(n));
+
+    return 0;
+}
