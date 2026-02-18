@@ -1,0 +1,109 @@
+// Problem: Power of x^n
+// Platform: LeetCode 50 / DSA
+//
+// Approaches:
+// 1. Brute Force
+// 2. Recursive Binary Power
+// 3. Iterative Binary Exponentiation ⭐
+//
+// Time Complexity:
+// Brute: O(n)
+// Recursive: O(log n)
+// Binary Expo: O(log n)
+//
+// Space Complexity:
+// Brute: O(1)
+// Recursive: O(log n)
+// Binary Expo: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class PowerCalculator {
+public:
+
+    //////////////////////////////////////////////////////
+    // 🔴 Approach 1: Brute Force — O(n)
+    //////////////////////////////////////////////////////
+    double bruteForce(double x, int n) {
+        if (n == 0) return 1.0;
+
+        long long temp = n;
+        if (temp < 0) {
+            x = 1 / x;
+            temp = -temp;
+        }
+
+        double ans = 1.0;
+        for (long long i = 0; i < temp; i++) {
+            ans *= x;
+        }
+        return ans;
+    }
+
+    //////////////////////////////////////////////////////
+    // 🟡 Approach 2: Recursive Binary Power — O(log n)
+    //////////////////////////////////////////////////////
+    double powerRecursive(double x, long long n) {
+        if (n == 0) return 1.0;
+
+        double half = powerRecursive(x, n / 2);
+
+        if (n % 2 == 0)
+            return half * half;
+        else
+            return x * half * half;
+    }
+
+    double recursiveMethod(double x, int n) {
+        long long temp = n;
+
+        if (temp < 0) {
+            return 1.0 / powerRecursive(x, -temp);
+        }
+
+        return powerRecursive(x, temp);
+    }
+
+    //////////////////////////////////////////////////////
+    // 🟢 Approach 3: Iterative Binary Exponentiation ⭐ BEST
+    //////////////////////////////////////////////////////
+    double binaryExpo(double x, int n) {
+        long long m = n;
+        double ans = 1.0;
+
+        if (m < 0) {
+            x = 1 / x;
+            m = -m;
+        }
+
+        while (m > 0) {
+            if (m % 2 == 1) {
+                ans *= x;
+                m--;
+            } else {
+                x *= x;
+                m /= 2;
+            }
+        }
+        return ans;
+    }
+};
+
+/////////////////////////////////////////////////////////////
+// 🔹 Driver Code
+/////////////////////////////////////////////////////////////
+int main() {
+    PowerCalculator pc;
+
+    double x = 2.0;
+    int n = 10;
+
+    cout << fixed << setprecision(4);
+
+    cout << "Brute Force : " << pc.bruteForce(x, n) << endl;
+    cout << "Recursive   : " << pc.recursiveMethod(x, n) << endl;
+    cout << "Binary Expo : " << pc.binaryExpo(x, n) << endl;
+
+    return 0;
+}
