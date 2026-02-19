@@ -1,0 +1,107 @@
+// Problem: Alternating Bits
+// Platform: LeetCode 693
+//
+// Approaches:
+// 1. Brute Force (bit by bit)
+// 2. Binary String
+// 3. XOR Trick ⭐
+// 4. Mathematical
+//
+// Time Complexity:
+// Brute: O(bits)
+// String: O(bits)
+// XOR: O(1)
+// Math: O(bits)
+//
+// Space Complexity:
+// Brute: O(1)
+// String: O(bits)
+// XOR: O(1)
+// Math: O(1)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+
+    //////////////////////////////////////////////////////
+    // ✅ Approach 1: Brute Force (bit by bit)
+    //////////////////////////////////////////////////////
+    bool bruteForce(int n) {
+        int prev = n & 1;
+        n >>= 1;
+
+        while (n > 0) {
+            int curr = n & 1;
+            if (curr == prev) return false;
+            prev = curr;
+            n >>= 1;
+        }
+        return true;
+    }
+
+    //////////////////////////////////////////////////////
+    // ✅ Approach 2: Using Binary String
+    //////////////////////////////////////////////////////
+    bool usingString(int n) {
+        string s = "";
+        while (n > 0) {
+            s.push_back((n & 1) + '0');
+            n >>= 1;
+        }
+
+        for (int i = 1; i < (int)s.size(); i++) {
+            if (s[i] == s[i - 1]) return false;
+        }
+        return true;
+    }
+
+    //////////////////////////////////////////////////////
+    // ✅ Approach 3: XOR Trick ⭐ BEST
+    //////////////////////////////////////////////////////
+    bool xorTrick(int n) {
+        long long x = (long long)n ^ (n >> 1);
+        return (x & (x + 1)) == 0;
+    }
+
+    //////////////////////////////////////////////////////
+    // ✅ Approach 4: Mathematical (mod/divide)
+    //////////////////////////////////////////////////////
+    bool mathCheck(int n) {
+        int last = -1;
+
+        while (n > 0) {
+            int bit = n % 2;
+            if (bit == last) return false;
+            last = bit;
+            n /= 2;
+        }
+        return true;
+    }
+};
+
+/////////////////////////////////////////////////////////////
+// 🔹 Driver Code
+/////////////////////////////////////////////////////////////
+int main() {
+    Solution obj;
+    int n;
+
+    cout << "Enter number: ";
+    cin >> n;
+
+    cout << "\nBrute Force: "
+         << (obj.bruteForce(n) ? "true" : "false") << endl;
+
+    cout << "Using String: "
+         << (obj.usingString(n) ? "true" : "false") << endl;
+
+    cout << "XOR Trick (Best): "
+         << (obj.xorTrick(n) ? "true" : "false") << endl;
+
+    cout << "Math Check: "
+         << (obj.mathCheck(n) ? "true" : "false") << endl;
+
+    return 0;
+}
